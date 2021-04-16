@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
 const userCtrl = require('../controllers/user');
 
 // Routes
@@ -8,6 +9,6 @@ router.post('/signup', userCtrl.create);
 // Login route
 router.post('/login', userCtrl.login);
 // Deleted route
-router.post('/deleted', userCtrl.deleted);
+router.delete('/delete', auth, userCtrl.delete);
 
 module.exports = router;

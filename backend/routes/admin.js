@@ -3,7 +3,23 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const postsCtrl = require('../controllers/posts');
 const commentsCtrl = require('../controllers/comments');
-const multer = require('../middleware/multer');
+const adminCtrl = require('../controllers/admin');
+
+// Routes Admin
+// Login admin
+router.post('/login', adminCtrl.login);
+// Delete post
+router.delete('/post/delete/:id', auth, adminCtrl.deletepost);
+// Modified post
+router.put('/post/update/:id', auth, adminCtrl.updatepost);
+// Delete comment
+router.delete('/comment/delete/:id', auth, adminCtrl.deletecomment);
+// Modified comment
+router.put('/comment/update/:id', auth, adminCtrl.updatecomment);
+// Delete user
+router.delete('/user/:id', auth, adminCtrl.deleteuser);
+
+
 
 // Routes Postes
 // View all article

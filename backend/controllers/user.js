@@ -1,12 +1,11 @@
 const db = require("../models");
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = db.user;
-const Op = db.Sequelize.Op;
-
 
  // Login user
  exports.login = (req, res, next) => {
-  User.findOne({ where: { mail: req.body.mail } })
+  User.findOne({ where: { email: req.body.email } })
     .then(user => {
       if (!user) {
         return res.status(404).json({ error: 'Mail not found.' });
@@ -19,6 +18,11 @@ const Op = db.Sequelize.Op;
         res.status(200).json({
           message: 'User auth.',
           userId: user._id,
+          token: jwt.sign(
+            { userId: user._id },
+            'RANDOM_TOKEN_SECRET',
+            { expiresIn: '24h' }
+          )
         });
       })
         .catch(error => res.status(500).json({ error }));
@@ -29,7 +33,7 @@ const Op = db.Sequelize.Op;
 
 // Create a new user
 exports.create = (req, res) => {
-  User.findOne({ where: { mail: req.body.mail } })
+  User.findOne({ where: { email: req.body.email } })
   .then(user => {
     if (user) {
       return res.status(404).json({ error: 'Mail already found !' });
@@ -37,9 +41,10 @@ exports.create = (req, res) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const newuser = {
-        mail: req.body.mail,
+        email: req.body.email,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
+        avatar: req.body.avatar,
         password: hash,
         admin: 0
       };
@@ -59,8 +64,8 @@ exports.create = (req, res) => {
   };
 
 // Deleted a new user
-exports.deleted = (req, res, next) => {
-  User.findOne({ where: { mail: req.body.mail } })
+exports.delete = (req, res, next) => {
+  User.findOne({ where: { email: req.body.email } })
     .then(user => {
       if (!user) {
         return res.status(404).json({ error: 'Mail not found.' });
@@ -70,11 +75,9 @@ exports.deleted = (req, res, next) => {
         if (!valid) {
           return res.status(404).json({ error: 'Password wrong.' });
         }
-        User.destroy({ where: { mail: req.body.mail } })
-        // clé étrangere en mode cascade
-        // ajout avatar
+        User.destroy({ where: { email: req.body.email } })
         res.status(200).json({
-          message: 'Mail deleted.',
+          message: 'User deleted.',
         });
       })
         .catch(error => res.status(500).json({ error }));

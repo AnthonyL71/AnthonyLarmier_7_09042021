@@ -1,18 +1,24 @@
 var DataTypes = require("sequelize").DataTypes;
 var _comments = require("./comments");
-var _post = require("./post");
-var _user = require("./user");
+var _posts = require("./posts");
+var _users = require("./users");
 
 function initModels(sequelize) {
   var comments = _comments(sequelize, DataTypes);
-  var post = _post(sequelize, DataTypes);
-  var user = _user(sequelize, DataTypes);
+  var posts = _posts(sequelize, DataTypes);
+  var users = _users(sequelize, DataTypes);
 
+  comments.belongsTo(posts, { as: "post", foreignKey: "post_id"});
+  posts.hasMany(comments, { as: "comments", foreignKey: "post_id"});
+  comments.belongsTo(users, { as: "profil", foreignKey: "profil_id"});
+  users.hasMany(comments, { as: "comments", foreignKey: "profil_id"});
+  posts.belongsTo(users, { as: "profil", foreignKey: "profil_id"});
+  users.hasMany(posts, { as: "posts", foreignKey: "profil_id"});
 
   return {
     comments,
-    post,
-    user,
+    posts,
+    users,
   };
 }
 module.exports = initModels;
