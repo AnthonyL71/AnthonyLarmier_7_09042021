@@ -38,9 +38,9 @@ router.delete('/delete/:id', auth, postsCtrl.delete);
 // View all post 
 router.get('/post/:id', auth, commentsCtrl.getcomments);
 // Create post
-router.post('/post/create', auth, commentsCtrl.createcomments);
+router.post('/post', auth, commentsCtrl.createcomments);
 // Modified comments
-router.put('/post/update/:id', auth, commentsCtrl.updatecomments);
+router.put('/post/:id', auth, commentsCtrl.updatecomments);
 
 
 module.exports = router;
