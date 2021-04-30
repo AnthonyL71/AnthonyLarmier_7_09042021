@@ -5,7 +5,7 @@ const Comments = db.comments;
 
 // Search comments by Post
 exports.getcomments = (req, res, next) => {
-      Comments.findAll({ where: { post_id: req.params.id }})
+      Comments.findAll({ where: { post_id: req.params.id, validate: 1 }})
       .then(
         (comments) => {
           res.status(200).json(comments)
@@ -41,7 +41,7 @@ exports.updatecomments = (req, res, next) => {
   Comments.findOne({ where: { id: req.params.id } })
   .then(comments => {
     if (comments.profil_id === req.body.profil_id) {
-    Comments.update({ comment_text: req.body.comment_text },{ where: { id: req.params.id } })
+    Comments.update({ comment_text: req.body.comment_text, validate: 0 },{ where: { id: req.params.id } })
     .then( () => {
       res.status(201).json({ message: 'Comment updated successfully!' });
     })

@@ -3,7 +3,9 @@
   <div class="hello">
     <div id="app">
       <span v-if="httpGetStatus == 200">
-        <input type="submit" name="enregister" class="form-control quattrocento button btn btn-dark btn-" value="Deconnection" @click="onDisconnect()"/> 
+        <div style="width: 250px;" class="p-4">
+        <input type="submit" name="enregister" class="form-control quattrocento button btn btn-dark" value="Deconnection" @click="onDisconnect()"/> 
+        </div>
         <div class="row">
           <div class="col-sm-4"></div>
             <div class="col-sm-4">
@@ -56,6 +58,7 @@
     </div>
   {{ httpResponse }}
   {{ httpStatus }}
+  
   </span>
 </div>
 
@@ -88,6 +91,7 @@ export default {
   },
      created(){
     this.onTestGet()
+    this.searchCommentaire()
  },
 methods: {
   checkForm: function (e) {
@@ -128,20 +132,21 @@ methods: {
         this.httpgetResponse = json;
       });
     },
-          onCommentairesGet(id) {
+          onCommentairesGet() {
       // Données à poster
             const requestOptions = {
         headers: authHeader()
     };
 
       // Appel POST
-      this.$http.get('http://localhost:3000/api/forum/post/' + id + '', requestOptions ).then(function(response) {
+      this.$http.get('http://localhost:3000/api/forum/post/10', requestOptions ).then(function(response) {
         // Comme c'est du Json: on le traduit
         this.httpGetStatus = response.status;
         return response.json();
       }).then(function(json) {
         // On lit le contenu du Json
         this.httpgetcommentaireResponse = json;
+        console.log('ahah');
         console.log(json);
       });
     },

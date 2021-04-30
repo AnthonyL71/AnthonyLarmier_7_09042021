@@ -18,7 +18,7 @@ exports.getone = (req, res, next) => {
 
 // Search all Postes
 exports.viewall = (req, res, next) => {
-  Post.findAll().then(
+  Post.findAll({ where: { validate: 1 } }).then(
     (post) => {
       res.status(200).json(post);
     }
@@ -52,7 +52,7 @@ exports.update = (req, res, next) => {
   Post.findOne({ where: { id: req.params.id } })
   .then(post => {
     if (post.profil_id === req.body.profil_id) {
-      Post.update({ description: req.body.description },{ where: { id: req.params.id } })
+      Post.update({ description: req.body.description, validate: 0 },{ where: { id: req.params.id } })
     .then( () => {
       res.status(201).json({ message: 'Article updated successfully!' });
     })
