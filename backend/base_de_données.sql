@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 23 avr. 2021 à 12:38
+-- Généré le : ven. 30 avr. 2021 à 15:30
 -- Version du serveur :  10.4.14-MariaDB
 -- Version de PHP : 7.4.10
 
@@ -32,6 +32,7 @@ CREATE TABLE `comments` (
   `comment_text` varchar(255) NOT NULL,
   `post_id` int(10) UNSIGNED NOT NULL,
   `profil_id` int(10) UNSIGNED DEFAULT NULL,
+  `validate` int(1) NOT NULL,
   `comment_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -46,6 +47,7 @@ CREATE TABLE `posts` (
   `description` varchar(255) NOT NULL,
   `media` varchar(255) DEFAULT NULL,
   `profil_id` int(10) UNSIGNED DEFAULT NULL,
+  `validate` int(1) NOT NULL,
   `posted_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
