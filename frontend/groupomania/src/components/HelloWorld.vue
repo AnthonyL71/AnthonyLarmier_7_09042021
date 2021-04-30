@@ -7,6 +7,7 @@
         <div class="row">
           <div class="col-sm-4"></div>
             <div class="col-sm-4">
+              
             <li v-for="item in httpgetResponse" :key="item.description">
               <div class="card">
                 <div class="card-body">
@@ -16,6 +17,17 @@
                   </div>
                   <div class="card-text">
                     {{ item.description }}
+                  </div>
+                  <div class="card-text">
+                    {{httpgetcommentaireResponse}}
+                                <li v-for="itempost in httpgetcommentaireResponse" :key="itempost.id">
+                                  <span v-if="itempost.post_id == item.id">
+                    {{ httpgetcommentaireResponse }}
+                                  </span>
+                                  <span v-else>
+
+                                  </span>
+                                  </li>
                   </div>
                 </div>    
               </div>
@@ -70,6 +82,7 @@ export default {
       httpResponse: '',
       errors: [],
       httpToken: '',
+      httpgetcommentaireResponse: '',
       httpgetResponse: ''
     }
   },
@@ -93,6 +106,12 @@ methods: {
 
       e.preventDefault();
     },
+    searchCommentaire() {
+                for (let d = 0; d < this.httpgetResponse.length; d++) {
+      this.onCommentairesGet(this.httpgetResponse[d].id);
+      console.log(this.httpgetResponse[d].id);
+                }
+    },
       onTestGet() {
       // Données à poster
             const requestOptions = {
@@ -107,6 +126,23 @@ methods: {
       }).then(function(json) {
         // On lit le contenu du Json
         this.httpgetResponse = json;
+      });
+    },
+          onCommentairesGet(id) {
+      // Données à poster
+            const requestOptions = {
+        headers: authHeader()
+    };
+
+      // Appel POST
+      this.$http.get('http://localhost:3000/api/forum/post/' + id + '', requestOptions ).then(function(response) {
+        // Comme c'est du Json: on le traduit
+        this.httpGetStatus = response.status;
+        return response.json();
+      }).then(function(json) {
+        // On lit le contenu du Json
+        this.httpgetcommentaireResponse = json;
+        console.log(json);
       });
     },
     onTestPost() {

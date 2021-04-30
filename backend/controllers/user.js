@@ -19,6 +19,7 @@ const User = db.user;
         res.status(200).json({
           message: 'User auth.',
           userId: user._id,
+          profile: user.admin,
           token: jwt.sign(
             { userId: user._id },
             'RANDOM_TOKEN_SECRET',
@@ -84,4 +85,18 @@ exports.delete = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
     })
     .catch(error => res.status(500).json({ error }));
+};
+
+exports.userdelete = (req, res, next) => {
+  User.findOne({ where: { email: req.body.email } })
+  .then(user => {
+      if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+      }
+      User.destroy({ where: { email: req.body.email } })
+      res.status(200).json({
+          message: 'User deleted.',
+      });
+  })
+  .catch(error => res.status(500).json({ error }));
 };

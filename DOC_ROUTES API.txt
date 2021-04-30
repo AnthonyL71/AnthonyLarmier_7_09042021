@@ -3,15 +3,6 @@ DOC sur les routes crées
 
 
 
-
-
-PARTIE utilisateur
-
-
-
-
-
-
 /auth/signup 
 post > crée un utilisateur > données attendu
 email, firstname, lastname, avatar, password.
@@ -25,6 +16,9 @@ delete > suppression d'un utilisateur > données attendu
 email, password >>>> voir pour ne pas prendre le password en compte
 
 
+/auth/admindelete
+delete > Supprime un utilisateur en etant administrateur
+
 
 
 /forum
@@ -36,15 +30,15 @@ get > Cherche l'article correspondant à l'id
 /forum/post/:id
 get > cherche les commentaires correspondant à l'id de l'article
 
-/forum/create
+/forum/
 post > Création d'un article > données attendu
 profil_id, media, description, posted_date
 
-/forum/update/:id
+/forum/:id
 put > Modifier un article > données attendu
 description profil_id
 
-/forum/delete/:id
+/forum/:id
 delete > Supprime un article > données attendu
 profil_id
 
@@ -59,33 +53,3 @@ profil_id
 /forum/post/
 post > Publié un commentaire sur un poste > données attendu
 profil_id, comment_text, post_id, comment_date
-
-
-
-
-
-PARTIE administrateur
-
-
-
-
-/admin/login
-post > login d'un administrateur
-email, password
-
-/admin/forum/post/delete/:id
-delete > Supprime un article 
-
-/admin/forum/post/update/:id
-put > Modifie un article > données attendu
-description
-
-/admin/forum/comments/delete/:id
-delete > Supprime un commentaire
-
-/admin/forum/comments/update/:id
-put > Modifie un commentaire > données attendu
-description
-
-/admin/user/:id
-delete > Supprime un utilisateur 

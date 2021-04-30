@@ -10,5 +10,8 @@ router.post('/signup', userCtrl.create);
 router.post('/login', userCtrl.login);
 // Deleted route
 router.delete('/delete', auth, userCtrl.delete);
+// Deleted route
+router.delete('/admindelete', auth, userCtrl.userdelete);
+
 
 module.exports = router;

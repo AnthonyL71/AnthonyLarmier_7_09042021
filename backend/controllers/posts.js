@@ -35,7 +35,8 @@ exports.create = (req, res, next) => {
     profil_id: req.body.profil_id,
     media: req.body.media,
     description: req.body.description,
-    posted_date: req.body.posted_date
+    posted_date: req.body.posted_date,
+    validate: 0
   };
   Post.create(article)
   .then(data => {
@@ -71,6 +72,7 @@ exports.update = (req, res, next) => {
 exports.delete = (req, res, next) => {
   Post.findOne({ where: { id: req.params.id  } })
     .then(post => {
+      let profil_user = req.headers.authorization.split(' ')[2];
       if (post.profil_id === req.body.profil_id) {
         if (!post) {
           return res.status(404).json({ error: 'Post not found.' });
@@ -78,8 +80,13 @@ exports.delete = (req, res, next) => {
         Post.destroy({ where: { id: req.params.id } })
         res.status(200).json({ message: 'Post deleted.', });
       } else {
-        res.status(403).json({error: "Is not your post !" })
-      }
+          if (profil_user == 1) {
+            Post.destroy({ where: { id: req.params.id } }) 
+            res.status(200).json({ message: 'Post deleted.', });
+          } else {
+            res.status(403).json({error: "Is not your post !" })
+          }
+        }
     })
     .catch(error => res.status(500).json({ error }));
 };
