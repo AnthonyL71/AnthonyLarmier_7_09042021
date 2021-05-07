@@ -18,6 +18,34 @@ exports.getcomments = (req, res, next) => {
       );
 };
 
+// Validate new comments
+exports.validatecomments = (req, res, next) => {
+  Comments.findAll({ where: { id: req.params.id, }})
+  .then(
+    (comments) => {
+      let profil_user = req.headers.authorization.split(' ')[2];
+        if (profil_user == 1) {
+          Comments.update({ validate: 1 },{ where: { id: req.params.id } })
+          .then( () => {
+            res.status(201).json({ message: 'Comment validate!' });
+          })
+          .catch(
+          (error) => {
+            res.status(404).json({ error: error });
+          }
+          );
+        } else {
+          res.status(403).json({error: "You are not admin !" })
+        }
+      }
+  )
+  .catch(
+    (error) => {
+      res.status(404).json({ error: error });
+    }
+  );
+};
+
 // Create new comments
 exports.createcomments = (req, res, next) => {
   const newcomments = {

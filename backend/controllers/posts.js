@@ -29,6 +29,35 @@ exports.viewall = (req, res, next) => {
   );
 };
 
+// Validate new Post
+
+exports.validateposts = (req, res, next) => {
+  Post.findAll({ where: { id: req.params.id, }})
+  .then(
+    (post) => {
+      let profil_user = req.headers.authorization.split(' ')[2];
+        if (profil_user == 1) {
+          Post.update({ validate: 1 },{ where: { id: req.params.id } })
+          .then( () => {
+            res.status(201).json({ message: 'Post validate!' });
+          })
+          .catch(
+          (error) => {
+            res.status(404).json({ error: error });
+          }
+          );
+        } else {
+          res.status(403).json({error: "You are not admin !" })
+        }
+      }
+  )
+  .catch(
+    (error) => {
+      res.status(404).json({ error: error });
+    }
+  );
+};
+
 // Create new Post
 exports.create = (req, res, next) => {
   const article = {

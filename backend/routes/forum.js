@@ -16,6 +16,8 @@ router.post('/', auth, postsCtrl.create);
 router.put('/:id', auth, postsCtrl.update);
 // Deleted article
 router.delete('/:id', auth, postsCtrl.delete);
+// Validate new article
+router.post('/validate/:id', auth, postsCtrl.validateposts);
 
 
 // Routes Comments
@@ -27,6 +29,8 @@ router.post('/post', auth, commentsCtrl.createcomments);
 router.put('/post/:id', auth, commentsCtrl.updatecomments);
 // Modified comments
 router.delete('/post/:id', auth, commentsCtrl.deletecomments);
+// Modified comments
+router.post('/post/validate/:id', auth, commentsCtrl.validatecomments);
 
 
 module.exports = router;
