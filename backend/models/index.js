@@ -24,5 +24,4 @@ db.post = require("./posts.js")(sequelize, Sequelize);
 db.comments = require("./comments.js")(sequelize, Sequelize);
 
 
-
 module.exports = db;

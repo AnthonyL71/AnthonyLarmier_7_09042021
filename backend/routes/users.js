@@ -13,5 +13,7 @@ router.delete('/delete', auth, userCtrl.delete);
 // Deleted route
 router.delete('/admindelete', auth, userCtrl.userdelete);
 
+router.get('/user/:id', auth, userCtrl.searchuser);
+
 
 module.exports = router;

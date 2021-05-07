@@ -87,6 +87,16 @@ exports.delete = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 };
 
+// Deleted a new user
+exports.searchuser = (req, res, next) => {
+  User.findOne({ where: { id: req.params.id } })
+    .then(user => {
+        let list = {id: user.id, firstname: user.firstname, lastname: user.lastname};
+        res.status(200).json(list);
+      })
+    .catch(error => res.status(500).json({ error }));
+};
+
 exports.userdelete = (req, res, next) => {
   User.findOne({ where: { email: req.body.email } })
   .then(user => {
