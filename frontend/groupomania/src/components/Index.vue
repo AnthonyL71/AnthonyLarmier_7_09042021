@@ -25,20 +25,25 @@
                       {{ item.description }}
                     </div>
                   <input type="submit" class="form-control button btn btn-dark" value="Commentaires" @click="onComments(item.id)"/>
-                  <div v-for="value in commentairesList" :key="value.id">
-                    <span v-if="value.post_id == item.id">
-                      <div class="card">
-                      <div v-for="usert in commentairesListUsername" :key="usert.id">
-                        <span v-if="usert.id == value.profil_id">
-                          <div class="card-title">{{ usert.firstname }} {{ usert.lastname }}</div>
-                        </span>
-                      </div>
-                      <div class="card-text">
-                        {{ value.comment_text }}
-                      </div>
-                      </div>
-                    </span>
-                  </div>
+                  <div id="posts">
+                    <div v-for="value in commentairesList" :key="value.id">
+                      <span v-if="value.post_id == item.id">
+                        <div class="card">
+                        <div v-for="usert in commentairesListUsername" :key="usert.id">
+                          <span v-if="usert.id == value.profil_id">
+                            <div class="card-title">{{ usert.firstname }} {{ usert.lastname }}</div>
+                          </span>
+                        </div>
+                        <div class="card-text">
+                          {{ value.comment_text }}
+                        </div>
+                        </div>
+                      </span>
+                    </div>
+                  <textarea v-model="commentaire" placeholder="Laisser un commentaire"></textarea>   
+                  <input type="submit" name="enregister" class="form-control button btn btn-dark btn-lg" value="Envoyer" @click="sendCommentaire(item.id)"/>              
+                   {{responseCommentaire}}
+                   </div>
                 </div>    
               </div>
             </li>
@@ -98,7 +103,8 @@ export default {
       commentairesListUsername: [],
       postListUsername: [],
       httpgetuserResponsed: '',
-      httpgetResponse: ''
+      httpgetResponse: '',
+      responseCommentaire: '',
     }
   },
   created(){
@@ -192,7 +198,19 @@ export default {
         this.functionSearchName();
       });
     },
-
+    sendCommentaire(key) {
+      let datecommentaire = new Date();
+            const requestOptions = {
+        headers: authHeader()
+      };
+      var connect = { comment_text:this.commentaire, post_id:key, date: datecommentaire, profil_id: 12  };
+      this.$http.post('http://localhost:3000/api/forum/post', connect, requestOptions ).then(function(response) {
+        this.httpPostStatus = response.status;
+        return response.json();
+      }).then(function(json) {
+        this.responseCommentaire = json;
+      });
+    },
     loginPost() {
       var connect = { email:this.email, password:this.password };
       this.$http.post('http://localhost:3000/api/auth/login', connect ).then(function(response) {

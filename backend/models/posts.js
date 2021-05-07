@@ -23,6 +23,10 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
+    validate: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     posted_date: {
       type: DataTypes.DATE,
       allowNull: false
