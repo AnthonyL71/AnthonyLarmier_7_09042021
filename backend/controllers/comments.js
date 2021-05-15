@@ -48,8 +48,9 @@ exports.validatecomments = (req, res, next) => {
 
 // Create new comments
 exports.createcomments = (req, res, next) => {
+  let profil_id = req.headers.authorization.split(' ')[3];
   const newcomments = {
-      profil_id: req.body.profil_id,
+      profil_id: profil_id,
       comment_text: req.body.comment_text,
       post_id: req.body.post_id,
       comment_date: req.body.date,
@@ -68,7 +69,8 @@ exports.createcomments = (req, res, next) => {
 exports.updatecomments = (req, res, next) => {
   Comments.findOne({ where: { id: req.params.id } })
   .then(comments => {
-    if (comments.profil_id === req.body.profil_id) {
+    let profil_id = req.headers.authorization.split(' ')[3];
+    if (comments.profil_id === profil_id) {
     Comments.update({ comment_text: req.body.comment_text, validate: 0 },{ where: { id: req.params.id } })
     .then( () => {
       res.status(201).json({ message: 'Comment updated successfully!' });
@@ -89,8 +91,9 @@ exports.updatecomments = (req, res, next) => {
 exports.deletecomments = (req, res, next) => {
   Comments.findOne({ where: { id: req.params.id } })
   .then(comments => {
+    let profil_id = req.headers.authorization.split(' ')[3];
     let profil_user = req.headers.authorization.split(' ')[2];
-    if (comments.profil_id === req.body.profil_id) {
+    if (comments.profil_id === profil_id) {
       Comments.destroy({ where: { id: req.params.id } })
     .then( () => {
       res.status(201).json({ message: 'Comment deleted successfully!' });

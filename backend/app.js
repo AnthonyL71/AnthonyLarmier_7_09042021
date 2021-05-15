@@ -3,7 +3,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/users');
 const forumRoutes = require('./routes/forum');
-const adminRoutes = require('./routes/admin');
 const path = require('path');
 
 app.use((req, res, next) => {
@@ -21,7 +20,6 @@ app.use('/api/auth', userRoutes);
 
 app.use('/api/forum', forumRoutes);
 
-app.use('/api/admin', adminRoutes);
 
 module.exports = app;
 

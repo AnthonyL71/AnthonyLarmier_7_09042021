@@ -6,6 +6,7 @@
         <div style="width: 250px;" class="p-4">
           <input type="submit" name="enregister" class="form-control button btn btn-dark" value="Deconnection" @click="onDisconnect()"/> 
         </div>
+        <p><router-link class="text-center" to="/newpost">Nouveau poste</router-link></p>
         <div class="row">
           <div class="col-sm-4"></div>
             <div class="col-sm-4">
@@ -25,25 +26,28 @@
                       {{ item.description }}
                     </div>
                   <input type="submit" class="form-control button btn btn-dark" value="Commentaires" @click="onComments(item.id)"/>
-                  <div id="posts">
-                    <div v-for="value in commentairesList" :key="value.id">
-                      <span v-if="value.post_id == item.id">
-                        <div class="card">
-                        <div v-for="usert in commentairesListUsername" :key="usert.id">
-                          <span v-if="usert.id == value.profil_id">
-                            <div class="card-title">{{ usert.firstname }} {{ usert.lastname }}</div>
-                          </span>
-                        </div>
-                        <div class="card-text">
-                          {{ value.comment_text }}
-                        </div>
-                        </div>
-                      </span>
+                  <span v-if="Commentaire == 1">
+                    <div id="posts">
+                      <div v-for="value in commentairesList" :key="value.id">
+                        <span v-if="value.post_id == item.id">
+                          <div class="card">
+                          <div v-for="usert in commentairesListUsername" :key="usert.id">
+                            <span v-if="usert.id == value.profil_id">
+                              <div class="card-title">{{ usert.firstname }} {{ usert.lastname }}</div>
+                            </span>
+                          </div>
+                          <div class="card-text">
+                            {{ value.comment_text }}
+                          </div>
+                          <span class="text-right">{{ value.comment_date }}</span>
+                          </div>
+                        </span>
+                      </div>
+                    <textarea v-model="commentaire" placeholder="Laisser un commentaire"></textarea>   
+                    <input type="submit" name="enregister" class="form-control button btn btn-dark btn-lg" value="Envoyer" @click="sendCommentaire(item.id)"/>              
+                    {{responseCommentaire}}
                     </div>
-                  <textarea v-model="commentaire" placeholder="Laisser un commentaire"></textarea>   
-                  <input type="submit" name="enregister" class="form-control button btn btn-dark btn-lg" value="Envoyer" @click="sendCommentaire(item.id)"/>              
-                   {{responseCommentaire}}
-                   </div>
+                  </span>
                 </div>    
               </div>
             </li>
@@ -144,10 +148,13 @@ export default {
       }
     },
     onComments(key) {
+      if (this.Commentaire == 1) {
+        this.Commentaire = 0;
+      } else {
       this.getCommentaire(key);
-      this.functionSearchName();
       this.functionSearchNamePost();
       this.Commentaire = 1;
+      }
     },
 
     onTestGet() {
