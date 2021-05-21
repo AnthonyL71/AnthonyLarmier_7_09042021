@@ -102,7 +102,10 @@ export default {
   margin:5px;
   color:red;
 }
-
+.form-group img {
+    margin-top: 20px;
+    max-width: 100%;
+}
 li {
 list-style-type: none!important;
 }

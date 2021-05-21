@@ -321,7 +321,9 @@ margin: 0 auto;
 li {
 list-style-type: none!important;
 }
-
+.card-text img {
+    max-width: 100%;
+}
 .card-text {
   margin: 15px;
 }
