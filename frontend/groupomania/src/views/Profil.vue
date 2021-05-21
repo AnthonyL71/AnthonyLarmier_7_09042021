@@ -16,3 +16,9 @@ export default {
   }
 }
 </script>
+<style>
+#logo {
+    max-width: 250px;
+    max-height: 100%;
+}
+</style>

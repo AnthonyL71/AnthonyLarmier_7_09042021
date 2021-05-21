@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img id="logo" alt="Vue logo" src="../assets/icon-left-font-monochrome-black.png">
+    <a><router-link class="text-center" to="/"><img id="logo" alt="Vue logo" src="../assets/icon-left-font-monochrome-black.png"></router-link></a>
     <Index msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
@@ -16,3 +16,10 @@ export default {
   }
 }
 </script>
+
+<style>
+#logo {
+    max-width: 250px;
+    max-height: 100%;
+}
+</style>

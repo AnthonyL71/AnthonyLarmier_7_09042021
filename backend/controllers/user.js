@@ -90,7 +90,7 @@ exports.delete = (req, res, next) => {
 exports.searchuser = (req, res, next) => {
   User.findOne({ where: { id: req.params.id } })
     .then(user => {
-        let list = {id: user.id, firstname: user.firstname, lastname: user.lastname, avatar: user.avatar, email: user.email};
+        let list = {id: user.id, firstname: user.firstname, lastname: user.lastname, avatar: user.avatar};
         res.status(200).json(list);
       })
     .catch(error => res.status(500).json({ error }));

@@ -1,7 +1,5 @@
 
 <template>
-  <div class="index">
-    <div id="app">
       <span v-if="httpGetStatus == 200">
         <div style="width: 250px;" class="p-4">
           <input type="submit" name="enregister" class="form-control button btn btn-dark" value="Deconnection" @click="onDisconnect()"/> 
@@ -87,9 +85,6 @@
   {{ httpStatus }}
   
   </span>
-</div>
-
-  </div>
 </template>
 
 
@@ -326,9 +321,7 @@ margin: 0 auto;
 li {
 list-style-type: none!important;
 }
-.card-text img {
-    max-width: 100%;
-}
+
 .card-text {
   margin: 15px;
 }
