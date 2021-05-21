@@ -70,7 +70,7 @@ exports.updatecomments = (req, res, next) => {
   Comments.findOne({ where: { id: req.params.id } })
   .then(comments => {
     let profil_id = req.headers.authorization.split(' ')[3];
-    if (comments.profil_id === profil_id) {
+    if (comments.profil_id == profil_id) {
     Comments.update({ comment_text: req.body.comment_text, validate: 0 },{ where: { id: req.params.id } })
     .then( () => {
       res.status(201).json({ message: 'Comment updated successfully!' });
@@ -93,7 +93,7 @@ exports.deletecomments = (req, res, next) => {
   .then(comments => {
     let profil_id = req.headers.authorization.split(' ')[3];
     let profil_user = req.headers.authorization.split(' ')[2];
-    if (comments.profil_id === profil_id) {
+    if (comments.profil_id == profil_id) {
       Comments.destroy({ where: { id: req.params.id } })
     .then( () => {
       res.status(201).json({ message: 'Comment deleted successfully!' });

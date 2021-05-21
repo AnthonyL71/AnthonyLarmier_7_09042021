@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Newpost from '../views/Newpost.vue'
+import Profil from '../views/Profil.vue'
 
 Vue.use(VueRouter)
 
@@ -10,6 +11,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+  path: '/profil',
+  name: 'Profil',
+  component: Profil
   },
   {
   path: '/newpost',

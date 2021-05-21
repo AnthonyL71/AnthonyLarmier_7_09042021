@@ -5,7 +5,7 @@
             <div class="container">
                 <fieldset>
                     <div class="text-center">
-                        <div class="form-group font-weight-bold card-header padding text-left">
+                        <div class="form-group font-weight-bold card-header">
                             <h1 class="text-center">Crée un nouveau poste</h1>
                     <textarea class="form-control" rows="7" cols="50" v-model="text" placeholder="Votre texte pour le poste"></textarea>   
                             <input class="form-control email" type="text" placeholder="lien" v-model="lien"/>

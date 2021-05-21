@@ -82,7 +82,7 @@ exports.update = (req, res, next) => {
   let profil_id = req.headers.authorization.split(' ')[3];
   Post.findOne({ where: { id: req.params.id } })
   .then(post => {
-    if (post.profil_id === profil_id) {
+    if (post.profil_id == profil_id) {
       Post.update({ description: req.body.description, validate: 0 },{ where: { id: req.params.id } })
     .then( () => {
       res.status(201).json({ message: 'Article updated successfully!' });
@@ -105,7 +105,7 @@ exports.delete = (req, res, next) => {
     .then(post => {
       let profil_id = req.headers.authorization.split(' ')[3];
       let profil_user = req.headers.authorization.split(' ')[2];
-      if (post.profil_id === profil_id) {
+      if (post.profil_id == profil_id) {
         if (!post) {
           return res.status(404).json({ error: 'Post not found.' });
         }

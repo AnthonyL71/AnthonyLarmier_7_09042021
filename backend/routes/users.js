@@ -9,7 +9,7 @@ router.post('/signup', userCtrl.create);
 // Login route
 router.post('/login', userCtrl.login);
 // Deleted route
-router.delete('/delete', auth, userCtrl.delete);
+router.delete('/delete/:id', auth, userCtrl.delete);
 
 router.get('/user/:id', auth, userCtrl.searchuser);
 

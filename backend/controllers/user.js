@@ -68,27 +68,19 @@ exports.create = (req, res) => {
 
 // Deleted a new user
 exports.delete = (req, res, next) => {
-  User.findOne({ where: { email: req.body.email } })
+  User.findOne({ where: { id: req.params.id } })
     .then(user => {
       let profil_user = req.headers.authorization.split(' ')[2];
-      console.log(profil_user);
       if (profil_user == 1) {
-        User.destroy({ where: { email: req.body.email } })
+        User.destroy({ where: { id: req.params.id } })
       } else {
         if (!user) {
           return res.status(404).json({ error: 'Mail or password wrong.' });
         }
-        bcrypt.compare(req.body.password, user.password)
-        .then(valid => {
-          if (!valid) {
-            return res.status(404).json({ error: 'Mail or password wrong.' });
-          }
-          User.destroy({ where: { email: req.body.email } })
+          User.destroy({ where: { id: req.params.id } })
           res.status(200).json({
             message: 'User deleted.',
           });
-        })
-          .catch(error => res.status(500).json({ error }));
       }
     })
     .catch(error => res.status(500).json({ error }));
@@ -98,7 +90,7 @@ exports.delete = (req, res, next) => {
 exports.searchuser = (req, res, next) => {
   User.findOne({ where: { id: req.params.id } })
     .then(user => {
-        let list = {id: user.id, firstname: user.firstname, lastname: user.lastname};
+        let list = {id: user.id, firstname: user.firstname, lastname: user.lastname, avatar: user.avatar, email: user.email};
         res.status(200).json(list);
       })
     .catch(error => res.status(500).json({ error }));
