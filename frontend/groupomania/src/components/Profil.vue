@@ -9,17 +9,21 @@
               <div class="text-center">
                 <div class="form-group font-weight-bold card-header padding text-left">
                   <h1 class="text-center">Profil</h1>
-                  <h3 class="pt-4">Prénom: {{userList.firstname}}</h3>
-                  <h3>Nom: {{userList.lastname}}</h3>
-                  <img :src="userList.avatar" />
-                  <p v-if="errors.length">
-                    <ul id="ulerror">
-                      <li id="lierror" v-for="error in errors" :key="error">{{ error }}</li>
-                  </ul>
-                  </p>
-                  <input type="submit" name="enregister" class="form-control button btn btn-danger btn-lg" value="Supprimer mon compte" @click="deletedUser(userList.id)"/>
-                  <p class="retour text-center"><router-link class="retour text-center" to="/">Retour</router-link></p>
-                  {{ error }}
+                  <div v-for="user in userList" :key="user.id">
+                    <span v-if="user.id == profil_utilisateur">
+                      <h3 class="pt-4">Prénom: {{user.firstname}}</h3>
+                      <h3>Nom: {{user.lastname}}</h3>
+                      <img :src="user.avatar" />
+                      <p v-if="errors.length">
+                        <ul id="ulerror">
+                          <li id="lierror" v-for="error in errors" :key="error">{{ error }}</li>
+                        </ul>
+                      </p>
+                      <input type="submit" name="enregister" class="form-control button btn btn-danger btn-lg" value="Supprimer mon compte" @click="deletedUser(user.id)"/>
+                      <p class="text-center"><router-link class="form-control text-center button btn btn-secondary btn-lg" to="/">Retour</router-link></p>
+                        {{ error }}
+                    </span>
+                  </div>
                 </div>
               </div>
             </fieldset>
@@ -80,12 +84,12 @@ export default {
     searchName() {
         let user = JSON.parse(localStorage.getItem('user'));
           if (user && user.token) {
-            this.profil_utilisateur = user.profil_id;
+            this.profil_utilisateur = user.userId;
           }
         const requestOptions = {
             headers: authHeader()
         };
-        this.$http.get('http://localhost:3000/api/auth/user/' + this.profil_utilisateur + '', requestOptions ).then(function(response) {
+      this.$http.get('http://localhost:3000/api/auth/user/', requestOptions ).then(function(response) {
           return response.json();
         }).then(function(json) {
             this.userList = json;  

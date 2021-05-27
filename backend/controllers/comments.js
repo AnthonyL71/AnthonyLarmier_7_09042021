@@ -5,22 +5,46 @@ const Comments = db.comments;
 
 // Search comments by Post
 exports.getcomments = (req, res, next) => {
-      Comments.findAll({ where: { post_id: req.params.id, validate: 1 }})
-      .then(
-        (comments) => {
-          res.status(200).json(comments)
-        }
-      )
-      .catch(
-        (error) => {
-          res.status(404).json({ error: error });
-        }
-      );
+  Comments.findAll({ where: { post_id: req.params.id, validate: 1 },
+    order: [['id', 'DESC']]})
+  .then(
+    (comments) => {
+      res.status(200).json(comments)
+    }
+  )
+  .catch(
+    (error) => {
+      res.status(404).json({ error: error });
+    }
+  );
+};
+
+
+// Search comments not validate for admin
+exports.commentsnotvalidate = (req, res, next) => {
+  let profil_user = req.headers.authorization.split(' ')[2];
+  if (profil_user == 1) {
+    Comments.findAll({ where: { validate: 0 },
+      order: [['id', 'DESC']]})
+    .then(
+      (comments) => {
+        console.log(comments);
+        res.status(200).json(comments)
+      }
+    )
+    .catch(
+      (error) => {
+        res.status(404).json({ error: error });
+      }
+    );
+  } else {
+    res.status(403).json({error: "You are not admin !" })
+  }
 };
 
 // Validate new comments
 exports.validatecomments = (req, res, next) => {
-  Comments.findAll({ where: { id: req.params.id, }})
+  Comments.findOne({ where: { id: req.params.id, }})
   .then(
     (comments) => {
       let profil_user = req.headers.authorization.split(' ')[2];
@@ -48,9 +72,9 @@ exports.validatecomments = (req, res, next) => {
 
 // Create new comments
 exports.createcomments = (req, res, next) => {
-  let profil_id = req.headers.authorization.split(' ')[3];
+  let userId = req.headers.authorization.split(' ')[3];
   const newcomments = {
-      profil_id: profil_id,
+      profil_id: userId,
       comment_text: req.body.comment_text,
       post_id: req.body.post_id,
       comment_date: req.body.date,
@@ -69,8 +93,8 @@ exports.createcomments = (req, res, next) => {
 exports.updatecomments = (req, res, next) => {
   Comments.findOne({ where: { id: req.params.id } })
   .then(comments => {
-    let profil_id = req.headers.authorization.split(' ')[3];
-    if (comments.profil_id == profil_id) {
+    let userId = req.headers.authorization.split(' ')[3];
+    if (comments.profil_id == userId) {
     Comments.update({ comment_text: req.body.comment_text, validate: 0 },{ where: { id: req.params.id } })
     .then( () => {
       res.status(201).json({ message: 'Comment updated successfully!' });
@@ -91,9 +115,9 @@ exports.updatecomments = (req, res, next) => {
 exports.deletecomments = (req, res, next) => {
   Comments.findOne({ where: { id: req.params.id } })
   .then(comments => {
-    let profil_id = req.headers.authorization.split(' ')[3];
+    let userId = req.headers.authorization.split(' ')[3];
     let profil_user = req.headers.authorization.split(' ')[2];
-    if (comments.profil_id == profil_id) {
+    if (comments.profil_id == userId) {
       Comments.destroy({ where: { id: req.params.id } })
     .then( () => {
       res.status(201).json({ message: 'Comment deleted successfully!' });
@@ -105,7 +129,7 @@ exports.deletecomments = (req, res, next) => {
     );
     } else {
       if (profil_user == 1) {
-        Post.destroy({ where: { id: req.params.id } }) 
+        Comments.destroy({ where: { id: req.params.id } }) 
         res.status(200).json({ message: 'Comment deleted.', });
       } else {
 			res.status(403).json({error: "Is not your comment !" })

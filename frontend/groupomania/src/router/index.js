@@ -3,6 +3,10 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Newpost from '../views/Newpost.vue'
 import Profil from '../views/Profil.vue'
+import Validpost from '../views/Validpost.vue'
+import Validcomments from '../views/Validcomments.vue'
+import Listusers from '../views/Listusers.vue'
+
 
 Vue.use(VueRouter)
 
@@ -21,6 +25,21 @@ const routes = [
   path: '/newpost',
   name: 'Newpost',
   component: Newpost
+  },
+  {
+    path: '/validpost',
+    name: 'Validpost',
+    component: Validpost
+  },
+  {
+    path: '/validcomments',
+    name: 'Validcomments',
+    component: Validcomments
+  },
+  {
+    path: '/listusers',
+    name: 'Listusers',
+    component: Listusers
   },
   {
     path: '/signup',

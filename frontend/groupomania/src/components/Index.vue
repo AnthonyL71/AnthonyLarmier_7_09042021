@@ -1,29 +1,55 @@
 
 <template>
-      <span v-if="httpGetStatus == 200">
-        <div style="width: 250px;" class="p-4">
-          <input type="submit" name="enregister" class="form-control button btn btn-dark" value="Deconnection" @click="onDisconnect()"/> 
-        </div>
-        <p><router-link class="text-center" to="/newpost">Nouveau poste</router-link></p>
-        <p><router-link class="text-center" to="/profil">Edit profil</router-link></p>
+  <span v-if="this.profil_user_or_admin === 1">   <!-- Partie Administrateur -->
+    <ul class="nav justify-content-center">
+      <li class="nav-item">
+        <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider</router-link></p>
+      </li>
+      <li class="nav-item">
+        <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider</router-link></p>
+      </li>
+      <li class="nav-item">
+        <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
+      </li>
+      <li class="nav-item">
+        <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
+      </li>
+    </ul>
+  </span>
+  <span v-else-if="this.profil_user_or_admin === 0">   <!-- Partie Utilisateur -->
+    <ul class="nav justify-content-center">
+      <li class="nav-item">
+        <p><router-link class="text-center button mx-1 btn btn-success" to="/newpost">Nouveau poste</router-link></p>
+      </li>
+      <li class="nav-item">
+        <p><router-link class="text-center button mx-1 btn btn-info" to="/profil">Edit profil</router-link></p>
+      </li>
+      <li class="nav-item">
+        <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
+      </li>
+    </ul>
         <div class="row">
           <div class="col-sm-4"></div>
             <div class="col-sm-4">
             <li v-for="item in httpgetResponse" :key="item.id">
-              <div v-for="user in postListUsername" :key="user.id">
-                <span v-if="user.id == item.profil_id">
-                  {{ user.firstname }} {{ user.lastname }}
-                  <span v-if="item.profil_id == profil_utilisateur"><b-icon-pencil-square class="pencil" scale="2" @click="editpost = item.id;"></b-icon-pencil-square><b-icon-trash-fill class="trash" scale="2" @click="onDeletedPost(item.id)"></b-icon-trash-fill></span>
-                </span>
-              </div>
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title"></h5>
+                  <h5 class="card-title">
+                                  <div v-for="user in postListUsername" :key="user.id">
+                <span v-if="user.id == item.profil_id">
+                  {{ user.firstname }} {{ user.lastname }}
+                  <span v-if="item.profil_id == profil_utilisateur">
+                      <b-icon-pencil-square class="pencil" scale="2" @click="editpost = item.id;"></b-icon-pencil-square>
+                      <b-icon-trash-fill class="trash" scale="2" @click="onDeletedPost(item.id)"></b-icon-trash-fill>
+                  </span>
+                </span>
+              </div>
+                  </h5>
                     <div class="card-text">
                       <img :src="item.media" />
                     </div>
                     <div class="card-text">
-                      <span v-if="editpost == item.id"><textarea v-model="postedit" :placeholder="[[item.description]]"></textarea><br><input type="submit" name="enregister" class=" col-6 form-control button btn btn-dark btn-md" value="Envoyer" @click="editPost(item.id)"/></span><span v-else>
+                      <span v-if="editpost == item.id"><textarea v-model="postedit" :placeholder="[[item.description]]"></textarea><br><input type="submit" name="enregister" class=" col-6 form-control button btn btn-success btn-md" value="Envoyer" @click="editPost(item.id)"/></span><span v-else>
                       {{ item.description }}
                       </span>
                     </div>
@@ -33,13 +59,13 @@
                       <div v-for="value in commentairesList" :key="value.id">
                         <span v-if="value.post_id == item.id">
                           <div class="card">
-                          <div v-for="usert in commentairesListUsername" :key="usert.id">
+                          <div v-for="usert in postListUsername" :key="usert.id">
                             <span v-if="usert.id == value.profil_id">
                               <div class="card-title">{{ usert.firstname }} {{ usert.lastname }} <span v-if="value.profil_id == profil_utilisateur"><b-icon-pencil-square class="pencil" scale="1.3" @click="editcommentaire = value.id;"></b-icon-pencil-square><b-icon-trash-fill class="trash" scale="1.3" @click="onDeletedCommentaires(value.id)"></b-icon-trash-fill></span></div>
                             </span>
                           </div>
                           <div class="card-text">
-                            <span v-if="editcommentaire == value.id"><textarea v-model="commentairedit" :placeholder="[[value.comment_text]]"></textarea><br><input type="submit" name="enregister" class=" col-6 form-control button btn btn-dark btn-md" value="Envoyer" @click="editCommentaireFonction(value.id)"/></span><span v-else>
+                            <span v-if="editcommentaire == value.id"><textarea v-model="commentairedit" :placeholder="[[value.comment_text]]"></textarea><br><input type="submit" name="enregister" class=" col-6 form-control button btn btn-success btn-md" value="Envoyer" @click="editCommentaireFonction(value.id)"/></span><span v-else>
 
                             {{ value.comment_text }}
                             </span>
@@ -49,7 +75,7 @@
                         </span>
                       </div>
                     <textarea v-model="commentaire" placeholder="Laisser un commentaire"></textarea>   
-                    <input type="submit" name="enregister" class="form-control button btn btn-dark btn-lg" value="Envoyer" @click="sendCommentaire(item.id)"/>              
+                    <input type="submit" name="enregister" class="form-control button btn btn-success btn-lg" value="Envoyer" @click="sendCommentaire(item.id)"/>              
                     {{responseCommentaire}}
                     </div>
                   </span>
@@ -75,6 +101,7 @@
                     </p>
                     <input type="submit" name="enregister" class="form-control button btn btn-dark btn-lg" value="Connexion" @click="checkForm()"/>
                     <p class="inscription text-center"><router-link class="inscription text-center" to="/signup">Inscription</router-link></p>
+                    {{error}}
                   </div>
                 </div>
               </fieldset>
@@ -117,6 +144,7 @@ export default {
       httpgetuserResponsed: '',
       httpgetResponse: '',
       profil_utilisateur: '',
+      profil_user_or_admin: '',
       editpost: 0,
       editcommentaire: 0,
       responseCommentaire: '',
@@ -146,24 +174,18 @@ export default {
       }
     },
     functionSearchName() {
-      this.commentairesListUsername = [];
-      for (let d = 0; d < this.commentairesList.length; d++) {
-        this.searchNameId(this.commentairesList[d].profil_id);
-      }
+        this.searchNameId();
     },
     functionSearchNamePost() {
-      for (let d = 0; d < this.httpgetResponse.length; d++) {
-        if (this.postListUsername.length == 0) {
-          this.searchNamePost(this.httpgetResponse[d].profil_id);
-        }
-      }
+        this.searchNamePost();
+      
     },
     onComments(key) {
       if (this.Commentaire != 0 && key == this.Commentaire) {
         this.Commentaire = 0;
       } else {
         this.getCommentaire(key);
-        this.functionSearchNamePost();
+        this.searchNameId();
         this.Commentaire = key;
       }
     },
@@ -204,31 +226,55 @@ export default {
         this.qqt = json.length;
         let user = JSON.parse(localStorage.getItem('user'));
           if (user && user.token) {
-              this.profil_utilisateur = user.profil_id;
+              this.profil_utilisateur = user.userId;
+              console.log(user.profile);
+                      this.profil_user_or_admin = user.profile;
+
           }
       });
     },
 
-    searchNameId(key) {
+    searchNameId() {
+      let list;
       const requestOptions = {
         headers: authHeader()
       };
-      this.$http.get('http://localhost:3000/api/auth/user/' + key + '', requestOptions ).then(function(response) {
+      this.$http.get('http://localhost:3000/api/auth/user/', requestOptions ).then(function(response) {
           return response.json();
       }).then(function(json) {
-        this.commentairesListUsername.push(json);  
-
+        for (let d = 0; d < json.length; d++) {
+          list = {
+            id: json[d].id,
+            firstname: json[d].firstname,
+            lastname: json[d].lastname,
+            avatar: json[d].avatar,
+            email: json[d].email,
+            admin: json[d].admin
+          };
+          this.commentairesListUsername.push(list);  
+        }   
       });
     },
 
-    searchNamePost(key) {
+    searchNamePost() {
+      let list;
       const requestOptions = {
         headers: authHeader()
       };
-      this.$http.get('http://localhost:3000/api/auth/user/' + key + '', requestOptions ).then(function(response) {
+      this.$http.get('http://localhost:3000/api/auth/user/', requestOptions ).then(function(response) {
         return response.json();
       }).then(function(json) {
-        this.postListUsername.push(json);  
+        for (let d = 0; d < json.length; d++) {
+          list = {
+            id: json[d].id,
+            firstname: json[d].firstname,
+            lastname: json[d].lastname,
+            avatar: json[d].avatar,
+            email: json[d].email,
+            admin: json[d].admin
+          };
+          this.postListUsername.push(list);  
+        }   
       });
     },
 
@@ -248,7 +294,7 @@ export default {
             const requestOptions = {
         headers: authHeader()
       };
-      var connect = { comment_text:this.commentaire, post_id:key, date: datecommentaire, profil_id: this.profil_id  };
+      var connect = { comment_text:this.commentaire, post_id:key, date: datecommentaire  };
       this.$http.post('http://localhost:3000/api/forum/post', connect, requestOptions ).then(function(response) {
         this.httpPostStatus = response.status;
         return response.json();
@@ -261,7 +307,7 @@ export default {
         const requestOptions = {
           headers: authHeader()
         };
-      var connect = { description:this.postedit, profil_id: this.profil_id  };
+      var connect = { description:this.postedit  };
       this.$http.put('http://localhost:3000/api/forum/' + key + '', connect, requestOptions ).then(function(response) {
         this.httpPostStatus = response.status;
         return response.json();
@@ -274,7 +320,7 @@ export default {
         const requestOptions = {
           headers: authHeader()
         };
-      var connect = { comment_text:this.commentairedit, profil_id: this.profil_id  };
+      var connect = { comment_text:this.commentairedit  };
       this.$http.put('http://localhost:3000/api/forum/post/' + key + '', connect, requestOptions ).then(function(response) {
         this.httpPostStatus = response.status;
         return response.json();
@@ -292,11 +338,13 @@ export default {
         this.httpResponse = json;
         this.httpToken = json.token;
         localStorage.setItem('user', JSON.stringify(json));
-        this.profil_id = json.profil_id;
+        this.profil_id = json.userId;
+        this.profil_user_or_admin = json.profile;
         window.location="/";
       });
     },
     onDisconnect() {
+      this.profil_user_or_admin = '';
       localStorage.removeItem('user');
       location.reload();
     }
@@ -306,10 +354,14 @@ export default {
 
 </script>
 <style>
+.nav {
+  margin-top: -50px;
+  margin-bottom: 40px;
+}
 .colonne-centree
 {
-float: none;
-margin: 0 auto;
+  float: none;
+  margin: 0 auto;
 }
 </style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -319,10 +371,10 @@ margin: 0 auto;
   color:red;
 }
 li {
-list-style-type: none!important;
+  list-style-type: none!important;
 }
 .card-text img {
-    max-width: 100%;
+  max-width: 100%;
 }
 .card-text {
   margin: 15px;
@@ -330,31 +382,24 @@ list-style-type: none!important;
 .card {
   margin: 15px;
 }
-.container
-{
-position: alternative;
-margin-top: 0px; 
-margin-right: auto;
-margin-left: auto;
+.container {
+  position: alternative;
+  margin-top: 0px; 
+  margin-right: auto;
+  margin-left: auto;
 }
 .email {
-margin-top: 20px;
+  margin-top: 20px;
+}
+.pencil {
+  margin-left: 40%;
 }
 .trash {
   color: red;
-  position: absolute;
-  right: 8%;
-}
-.pencil {
-  position:absolute;
-  right: 15%;
+  margin-left: 10%;
 }
 .password {
   margin: 25px 0 25px 0;
-}
-.button {
-  margin-top: 20px;
-  margin-bottom: 10px;
 }
 .inscription {
   margin-top: 15px;

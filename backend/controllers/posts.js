@@ -3,7 +3,7 @@ const Post = db.post;
 
 // Search one Post
 exports.getone = (req, res, next) => {
-    Post.findOne({ where: { id: req.params.id }})
+  Post.findOne({ where: { id: req.params.id }})
     .then(
       (post) => {
         res.status(200).json(post)
@@ -13,12 +13,13 @@ exports.getone = (req, res, next) => {
         res.status(404).json({ error: error });
       }
     );
-  };
+};
 
 
 // Search all Postes
 exports.viewall = (req, res, next) => {
-  Post.findAll({ where: { validate: 1 } }).then(
+  Post.findAll({ where: { validate: 1 },
+    order: [['id', 'DESC']]}).then(
     (post) => {
       res.status(200).json(post);
     }
@@ -27,6 +28,25 @@ exports.viewall = (req, res, next) => {
       res.status(404).json({ error: error });
     }
   );
+};
+
+// Search post not validate for admin
+exports.searchnotvalid = (req, res, next) => {
+  let profil_user = req.headers.authorization.split(' ')[2];
+    if (profil_user == 1) {
+    Post.findAll({ where: { validate: 0 },
+      order: [['id', 'DESC']]}).then(
+      (post) => {
+        res.status(200).json(post);
+      }
+    ).catch(
+      (error) => {
+        res.status(404).json({ error: error });
+      }
+    );
+  } else {
+    res.status(403).json({error: "You are not admin !" })
+  }
 };
 
 // Validate new Post
@@ -60,9 +80,9 @@ exports.validateposts = (req, res, next) => {
 
 // Create new Post
 exports.create = (req, res, next) => {
-  let profil_id = req.headers.authorization.split(' ')[3];
+  let userId = req.headers.authorization.split(' ')[3];
   const article = {
-    profil_id: profil_id,
+    profil_id: userId,
     media: req.body.media,
     description: req.body.description,
     posted_date: req.body.posted_date,
@@ -79,19 +99,19 @@ exports.create = (req, res, next) => {
 
 // Update Post
 exports.update = (req, res, next) => {
-  let profil_id = req.headers.authorization.split(' ')[3];
+  let userId = req.headers.authorization.split(' ')[3];
   Post.findOne({ where: { id: req.params.id } })
   .then(post => {
-    if (post.profil_id == profil_id) {
-      Post.update({ description: req.body.description, validate: 0 },{ where: { id: req.params.id } })
-    .then( () => {
-      res.status(201).json({ message: 'Article updated successfully!' });
-    })
-    .catch(
-      (error) => {
-        res.status(404).json({ error: error });
-      }
-    );
+    if (post.profil_id == userId) {
+        Post.update({ description: req.body.description, validate: 0 },{ where: { id: req.params.id } })
+      .then( () => {
+        res.status(201).json({ message: 'Article updated successfully!' });
+      })
+      .catch(
+        (error) => {
+          res.status(404).json({ error: error });
+        }
+      );
     } else {
 			res.status(403).json({error: "Is not your post !" })
     }
@@ -99,13 +119,13 @@ exports.update = (req, res, next) => {
   .catch(error => res.status(500).json({ error }));
 };
 
-
+// Deleted post
 exports.delete = (req, res, next) => {
   Post.findOne({ where: { id: req.params.id  } })
     .then(post => {
-      let profil_id = req.headers.authorization.split(' ')[3];
+      let userId = req.headers.authorization.split(' ')[3];
       let profil_user = req.headers.authorization.split(' ')[2];
-      if (post.profil_id == profil_id) {
+      if (post.profil_id == userId) {
         if (!post) {
           return res.status(404).json({ error: 'Post not found.' });
         }

@@ -18,9 +18,8 @@ const User = db.user;
         }
         res.status(200).json({
           message: 'User auth.',
-          userId: user._id,
+          userId: user.id,
           profile: user.admin,
-          profil_id: user.id,
           token: jwt.sign(
             { userId: user._id },
             'RANDOM_TOKEN_SECRET',
@@ -66,32 +65,35 @@ exports.create = (req, res) => {
   .catch(error => res.status(500).json({ error }));
   };
 
-// Deleted a new user
+// Deleted user
 exports.delete = (req, res, next) => {
+  let userId = req.headers.authorization.split(' ')[3];
+  let profil_user = req.headers.authorization.split(' ')[2];
   User.findOne({ where: { id: req.params.id } })
     .then(user => {
-      let profil_user = req.headers.authorization.split(' ')[2];
-      if (profil_user == 1) {
+      if (user.profil_id == userId) {
         User.destroy({ where: { id: req.params.id } })
+        res.status(200).json({
+          message: 'User deleted.',
+        });
       } else {
-        if (!user) {
-          return res.status(404).json({ error: 'Mail or password wrong.' });
-        }
+        if (profil_user == 1) {
           User.destroy({ where: { id: req.params.id } })
           res.status(200).json({
             message: 'User deleted.',
           });
-      }
+        }
+    }
     })
     .catch(error => res.status(500).json({ error }));
 };
 
 // Deleted a new user
 exports.searchuser = (req, res, next) => {
-  User.findOne({ where: { id: req.params.id } })
+  User.findAll({})
     .then(user => {
         let list = {id: user.id, firstname: user.firstname, lastname: user.lastname, avatar: user.avatar};
-        res.status(200).json(list);
+        res.status(200).json(user);
       })
     .catch(error => res.status(500).json({ error }));
 };

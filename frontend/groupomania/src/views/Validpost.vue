@@ -1,28 +1,24 @@
 <template>
-  <div class="home">
+  <div class="profile">
     <a><router-link class="text-center" to="/"><img id="logo" alt="Vue logo" src="../assets/icon-left-font-monochrome-black.png"></router-link></a>
-    <Index msg="Welcome to Your Vue.js App"/>
+    <Validpost msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Index from '@/components/Index.vue'
+import Validpost from '@/components/Validpost.vue'
 
 export default {
-  name: 'Home',
+  name: 'Validposte',
   components: {
-    Index
+    Validpost
   }
 }
 </script>
-
 <style>
-
 #logo {
-  margin-top: -65px;
-  min-width: 250px;
-  max-height: 50%;
+    max-width: 250px;
+    max-height: 100%;
 }
-
 </style>
