@@ -9,6 +9,10 @@ cd backend
 npm install
 ```
 
+Import "base_de_donées.sql" to mysql
+
+Edit config/config.js
+
 ```
 nodemon server
 ```
@@ -37,5 +41,9 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### For login admin
+
+```
+mail: admin@groupomania.fr
+password: admin
+```
