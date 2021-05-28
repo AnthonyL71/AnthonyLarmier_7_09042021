@@ -98,7 +98,7 @@
                         <li id="lierror" v-for="error in errors" :key="error">{{ error }}</li>
                       </ul>
                     </p>
-                    <input type="submit" name="enregister" class="form-control button btn btn-dark btn-lg" value="Connexion" @click="checkForm()"/>
+                    <input type="submit" class="form-control button btn btn-dark btn-lg" value="Connexion" @click="checkForm()"/>
                     <p class="inscription text-center"><router-link class="inscription text-center" to="/signup">Inscription</router-link></p>
                     {{error}}
                   </div>
@@ -155,6 +155,7 @@ export default {
   }, 
 
   methods: {
+    // Function for check validate form
     checkForm: function (e) {
       if (this.email && this.password) {
         this.loginPost();
@@ -168,19 +169,18 @@ export default {
       } 
       e.preventDefault();
     },
+    // Function for search commentaire in bdd
     searchCommentaire() {
       for (let d = 0; d < this.httpgetResponse.length; d++) {
         this.getCommentaire(this.httpgetResponse[d].id);
       }
     },
-    functionSearchName() {
-        this.searchNameId();
-    },
     functionSearchNamePost() {
         this.searchNamePost();
       
     },
-        onTestGetPost() {
+    // For admin, check post not validate
+    onTestGetPost() {
       const requestOptions = {
         headers: authHeader()
       };
@@ -193,11 +193,11 @@ export default {
         let user = JSON.parse(localStorage.getItem('user'));
           if (user && user.token) {
               this.profil_utilisateur = user.userId;
-                      this.profil_user_or_admin = user.profile;
-
+              this.profil_user_or_admin = user.profile;
           }
       });
     },
+    // For admin, check comments not validate
     onTestGetComments() {
       const requestOptions = {
         headers: authHeader()
@@ -205,27 +205,26 @@ export default {
       this.$http.get('http://localhost:3000/api/forum/post/commentsnotvalid', requestOptions ).then(function(response) {
         return response.json();
       }).then(function(json) {
-          console.log(json);
         this.httpgetResponseComments = json;
         this.functionSearchNamePost();
         this.qqt = json.length;
         let user = JSON.parse(localStorage.getItem('user'));
           if (user && user.token) {
               this.profil_utilisateur = user.userId;
-                      this.profil_user_or_admin = user.profile;
-
+              this.profil_user_or_admin = user.profile;
           }
       });
     },
+    // Function for menu comments
     onComments(key) {
       if (this.Commentaire != 0 && key == this.Commentaire) {
         this.Commentaire = 0;
       } else {
         this.getCommentaire(key);
-        this.searchNameId();
         this.Commentaire = key;
       }
     },
+    // Function for deleted post on bdd
     onDeletedPost(key) {
       const requestOptions = {
         headers: authHeader()
@@ -238,6 +237,7 @@ export default {
         window.location="/";      
       });
     },
+    // Function for deleted comments in bdd
     onDeletedCommentaires(key) {
       const requestOptions = {
         headers: authHeader()
@@ -250,6 +250,7 @@ export default {
         window.location="/"; 
       });
     },
+    // Function for download post to bdd
     onTestGet() {
       const requestOptions = {
         headers: authHeader()
@@ -263,36 +264,12 @@ export default {
         this.qqt = json.length;
         let user = JSON.parse(localStorage.getItem('user'));
           if (user && user.token) {
-              this.profil_utilisateur = user.userId;
-              console.log(user.profile);
-                      this.profil_user_or_admin = user.profile;
-
+            this.profil_utilisateur = user.userId;
+            this.profil_user_or_admin = user.profile;
           }
       });
     },
-
-    searchNameId() {
-      let list;
-      const requestOptions = {
-        headers: authHeader()
-      };
-      this.$http.get('http://localhost:3000/api/auth/user/', requestOptions ).then(function(response) {
-          return response.json();
-      }).then(function(json) {
-        for (let d = 0; d < json.length; d++) {
-          list = {
-            id: json[d].id,
-            firstname: json[d].firstname,
-            lastname: json[d].lastname,
-            avatar: json[d].avatar,
-            email: json[d].email,
-            admin: json[d].admin
-          };
-          this.commentairesListUsername.push(list);  
-        }   
-      });
-    },
-
+    // Function for search name to bdd
     searchNamePost() {
       let list;
       const requestOptions = {
@@ -314,7 +291,7 @@ export default {
         }   
       });
     },
-
+    // Search informations to comments
     getCommentaire(key) {
       const requestOptions = {
         headers: authHeader()
@@ -323,12 +300,12 @@ export default {
         return response.json();
       }).then(function(json) {
         this.commentairesList = json;  
-        this.functionSearchName();
       });
     },
+    // Function for create new comments
     sendCommentaire(key) {
       let datecommentaire = new Date();
-            const requestOptions = {
+      const requestOptions = {
         headers: authHeader()
       };
       var connect = { comment_text:this.commentaire, post_id:key, date: datecommentaire  };
@@ -340,7 +317,8 @@ export default {
         window.location="/";
       });
     },
-      editPost(key) {
+    // Function for edit post 
+    editPost(key) {
         const requestOptions = {
           headers: authHeader()
         };
@@ -353,7 +331,8 @@ export default {
         window.location="/";
       });
     },
-      editCommentaireFonction(key) {
+    // Function for edit comments
+    editCommentaireFonction(key) {
         const requestOptions = {
           headers: authHeader()
         };
@@ -366,6 +345,7 @@ export default {
         window.location="/";
       });
     },
+    // Function for login user or admin
     loginPost() {
       var connect = { email:this.email, password:this.password };
       this.$http.post('http://localhost:3000/api/auth/login', connect ).then(function(response) {
@@ -383,6 +363,7 @@ export default {
         this.errors.push(error.body.error);
       });
     },
+    // Function for disconnect
     onDisconnect() {
       this.profil_user_or_admin = '';
       localStorage.removeItem('user');
@@ -445,5 +426,10 @@ li {
   margin-top: 15px;
   margin-bottom: 0px;
   color: black!important;
+}
+@media(max-width: 600px) {
+  .pencil {
+    margin-left: 20%;
+  }
 }
 </style>

@@ -68,6 +68,7 @@ export default {
     this.searchName()
   }, 
     methods: {
+    // Function for delete user to bdd
     deletedUser(key) {
       const requestOptions = {
         headers: authHeader()
@@ -81,6 +82,7 @@ export default {
         window.location="/";
       });
     },
+    // Function for search name to bdd
     searchName() {
         let user = JSON.parse(localStorage.getItem('user'));
           if (user && user.token) {
@@ -99,35 +101,32 @@ export default {
 }
 
 </script>
-
-
 <style scoped>
 #lierror {
   margin:5px;
   color:red;
 }
 .form-group img {
-    margin-top: 20px;
-    max-width: 100%;
+  margin-top: 20px;
+  max-width: 100%;
 }
 li {
-list-style-type: none!important;
+  list-style-type: none!important;
 }
-.container
-{
-position: alternative;
-margin-top: 0px; 
-margin-right: auto;
-margin-left: auto;
+.container {
+  position: alternative;
+  margin-top: 0px; 
+  margin-right: auto;
+  margin-left: auto;
 }
 .espace {
-margin-top: 20px;
+  margin-top: 20px;
 }
 .password {
   margin: 25px 0 25px 0;
 }
 .button {
-      margin-top: 20px;
+  margin-top: 20px;
   margin-bottom: 10px;
 }
 .retour {

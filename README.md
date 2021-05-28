@@ -1,5 +1,6 @@
 # groupomania
 
+<<<<<<< HEAD
 ## Project setup for backend
 ```
 cd backend
@@ -18,6 +19,9 @@ nodemon server
 cd frontend/groupomania
 ```
 
+=======
+## Project setup
+>>>>>>> f3bffb5b34cfae789568b868833ca4fab1121d25
 ```
 npm install
 ```

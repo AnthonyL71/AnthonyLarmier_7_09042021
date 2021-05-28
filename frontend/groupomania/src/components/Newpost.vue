@@ -50,6 +50,7 @@ export default {
     }
   },
   methods: {
+    // Function for send form to api
     registerPost() {
         let datePost = new Date();
               const requestOptions = {
@@ -68,40 +69,25 @@ export default {
 }
 
 </script>
-
-
 <style scoped>
 #lierror {
   margin:5px;
   color:red;
 }
 li {
-list-style-type: none!important;
-}
-.container
-{
-position: alternative;
-margin-top: 0px; 
-width: 900px;
-margin-right: auto;
-margin-left: auto;
+  list-style-type: none!important;
 }
 .email {
-margin-top: 20px;
+  margin-top: 20px;
 }
 .password {
   margin: 25px 0 25px 0;
 }
 .button {
-      margin-top: 20px;
+  margin-top: 20px;
   margin-bottom: 10px;
 }
-.retour {
-  margin-top: 15px;
-  margin-bottom: 0px;
-  color: black!important;
-}
 textarea {
-    min-width: 200px;
+  min-width: 200px;
 }
 </style>

@@ -3,7 +3,6 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const postsCtrl = require('../controllers/posts');
 const commentsCtrl = require('../controllers/comments');
-const multer = require('../middleware/multer');
 
 // Routes Postes
 

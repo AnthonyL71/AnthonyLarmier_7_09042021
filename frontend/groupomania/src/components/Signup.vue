@@ -60,9 +60,10 @@ export default {
     }
   },
   methods: {
+    // Function for validate form
     checkForm: function (e) {
       if (this.email && this.firstname && this.lastname && this.password && this.password2 && this.password == this.password2) {
-        this.Signupnewuser();
+        this.Signupnewuser(); 
       }
       this.errors = [];
       if (!this.email) {
@@ -85,6 +86,7 @@ export default {
       }
       e.preventDefault();
     },
+    // Function for register new user
     Signupnewuser() {
       var register = { email:this.email, firstname:this.firstname, lastname:this.lastname, password:this.password };
       this.$http.post('http://localhost:3000/api/auth/signup', register ).then(function(response) {
@@ -103,31 +105,28 @@ export default {
 }
 
 </script>
-
-
 <style scoped>
 #lierror {
   margin:5px;
   color:red;
 }
 li {
-list-style-type: none!important;
+  list-style-type: none!important;
 }
-.container
-{
-position: alternative;
-margin-top: 0px; 
-margin-right: auto;
-margin-left: auto;
+.container {
+  position: alternative;
+  margin-top: 0px; 
+  margin-right: auto;
+  margin-left: auto;
 }
 .email {
-margin-top: 20px;
+  margin-top: 20px;
 }
 .password {
   margin: 25px 0 25px 0;
 }
 .button {
-      margin-top: 20px;
+  margin-top: 20px;
   margin-bottom: 10px;
 }
 .retour {

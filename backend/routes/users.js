@@ -6,7 +6,7 @@ const userCtrl = require('../controllers/user');
 // Routes Users
 
 // Signup route
-router.post('/signup', userCtrl.create);
+router.post('/signup', auth, userCtrl.create);
 // Login route
 router.post('/login', userCtrl.login);
 // Deleted route

@@ -2,18 +2,18 @@
   <div class="row">
     <div class="col-sm-12">
       <ul class="nav justify-content-center">
-          <li class="nav-item">
-              <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider</router-link></p>
-          </li>
-          <li class="nav-item">
-              <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider</router-link></p>
-          </li>
-          <li class="nav-item">
-              <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
-          </li>
-          <li class="nav-item">
-              <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
-          </li>
+        <li class="nav-item">
+          <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider <span class="badge badge-danger">{{httpgetResponsePost.length}}</span></router-link></p>
+        </li>
+        <li class="nav-item">
+          <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider <span class="badge badge-danger">{{httpgetResponseComments.length}}</span></router-link></p>
+        </li>
+        <li class="nav-item">
+          <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
+        </li>
+        <li class="nav-item">
+          <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
+        </li>
       </ul>
     </div>
     <div class="col-sm-4"></div>
@@ -56,16 +56,58 @@ export default {
       httpToken: '',
       commentairesListUsername: [],
       postListUsername: [],
+      httpgetResponseComments: '',
+      httpgetResponsePost: '',
       httpgetResponse: '',
       profil_utilisateur: '',
       profil_user_or_admin: '',
     }
   },
   created(){
-    this.searchNamePost()
+    this.searchNamePost(),
+    this.onTestGetPost(),
+    this.onTestGetComments()
   }, 
 
   methods: {
+    // Function for list post to bdd
+    onTestGetPost() {
+      const requestOptions = {
+        headers: authHeader()
+      };
+      this.$http.get('http://localhost:3000/api/forum/postnotvalid', requestOptions ).then(function(response) {
+        return response.json();
+      }).then(function(json) {
+        this.httpgetResponsePost = json;
+        this.functionSearchNamePost();
+        this.qqt = json.length;
+        let user = JSON.parse(localStorage.getItem('user'));
+          if (user && user.token) {
+            this.profil_utilisateur = user.userId;
+            this.profil_user_or_admin = user.profile;
+          }
+      });
+    },
+    // Function for list comments to bdd
+    onTestGetComments() {
+      const requestOptions = {
+        headers: authHeader()
+      };
+      this.$http.get('http://localhost:3000/api/forum/post/commentsnotvalid', requestOptions ).then(function(response) {
+        return response.json();
+      }).then(function(json) {
+          console.log(json);
+        this.httpgetResponseComments = json;
+        this.functionSearchNamePost();
+        this.qqt = json.length;
+        let user = JSON.parse(localStorage.getItem('user'));
+          if (user && user.token) {
+            this.profil_utilisateur = user.userId;
+            this.profil_user_or_admin = user.profile;
+          }
+      });
+    },
+    // Function for deleted user to bdd
     deletedUser(key) {
       const requestOptions = {
         headers: authHeader()
@@ -74,9 +116,10 @@ export default {
         return response.json();
       }).then(function() {
         alert('Utilisateur supprimé avec succès !');
-        window.location="/listusers";      
+        location.reload();
       });
     },
+    // Function for list user to bdd
     searchNamePost() {
       let list;
       const requestOptions = {
@@ -98,6 +141,7 @@ export default {
         }   
       });
     },
+    // Function for disconnect
     onDisconnect() {
         this.profil_user_or_admin = '';
         localStorage.removeItem('user');
@@ -108,17 +152,6 @@ export default {
 
 
 </script>
-<style>
-.nav {
-  margin-top: -50px;
-  margin-bottom: 40px;
-}
-.colonne-centree
-{
-  float: none;
-  margin: 0 auto;
-}
-</style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #lierror {
@@ -137,15 +170,6 @@ li {
 .card {
   margin: 15px;
 }
-.container {
-  position: alternative;
-  margin-top: 0px; 
-  margin-right: auto;
-  margin-left: auto;
-}
-.email {
-  margin-top: 20px;
-}
 .check {
     color: green;
   margin-left: 20%;
@@ -153,13 +177,5 @@ li {
 .trash {
   color: red;
   margin-left: 0%;
-}
-.password {
-  margin: 25px 0 25px 0;
-}
-.inscription {
-  margin-top: 15px;
-  margin-bottom: 0px;
-  color: black!important;
 }
 </style>

@@ -24,6 +24,14 @@ export default {
   name: 'profile',
   components: {
     Profil
+  },
+  methods: {
+    // Function for disconnect
+    onDisconnect() {
+      this.profil_user_or_admin = '';
+      localStorage.removeItem('user');
+      window.location="/";      
+    }
   }
 }
 </script>
