@@ -1,50 +1,48 @@
 <template>
-    <div class="row">
-        <div class="col-sm-12">
-            <ul class="nav justify-content-center">
-                <li class="nav-item">
-                    <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider</router-link></p>
-                </li>
-                <li class="nav-item">
-                    <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider</router-link></p>
-                </li>
-                <li class="nav-item">
-                    <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
-                </li>
-                <li class="nav-item">
-                    <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
-                </li>
-            </ul>
-        </div>
-        <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <li v-for="item in httpgetResponse" :key="item.id">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                            <div v-for="user in postListUsername" :key="user.id">
-                                <span v-if="user.id == item.profil_id">
-                                    {{ user.firstname }} {{ user.lastname }}
-                                    <span v-if="item.profil_id == profil_utilisateur">
-                                    </span>
-                                </span>
-                            </div>
-                            </h5>
-                            <div class="card-text">
-                                <img :src="item.media" />
-                            </div>
-                            <div class="card-text">
-                                <span>
-                                    {{ item.description }}
-                                </span>
-                            </div>   
-                            <b-icon-trash-fill class="trash" scale="2" @click="onDeletedPost(item.id)"></b-icon-trash-fill>
-                            <b-icon-check class="check" scale="3" @click="onValidatePost(item.id)"></b-icon-check>
-                        </div>
-                    </div>
-                </li>
+  <div class="row">
+    <div class="col-sm-12">
+      <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider <span class="badge badge-danger">{{httpgetResponse.length}}</span></router-link></p>
+        </li>
+        <li class="nav-item">
+          <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider <span class="badge badge-danger">{{httpgetResponseComments.length}}</span></router-link></p>
+        </li>
+        <li class="nav-item">
+          <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
+        </li>
+        <li class="nav-item">
+          <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <li v-for="item in httpgetResponse" :key="item.id">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">
+              <div v-for="user in postListUsername" :key="user.id">
+                <span v-if="user.id == item.profil_id">
+                  {{ user.firstname }} {{ user.lastname }}
+                </span>
+              </div>
+              </h5>
+              <div class="card-text">
+                <img :src="item.media" />
+              </div>
+              <div class="card-text">
+                <span>
+                  {{ item.description }}
+                </span>
+              </div>   
+              <b-icon-trash-fill class="trash" scale="2" @click="onDeletedPost(item.id)"></b-icon-trash-fill>
+              <b-icon-check class="check" scale="3" @click="onValidatePost(item.id)"></b-icon-check>
             </div>
-        </div>
+          </div>
+        </li>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -62,18 +60,18 @@ export default {
       commentairesListUsername: [],
       postListUsername: [],
       httpgetResponse: '',
+      httpgetResponseComments: '',
       profil_utilisateur: '',
       profil_user_or_admin: '',
     }
   },
   created(){
-    this.onTestGet()
+    this.onTestGet(),
+    this.onTestGetComments()
   }, 
-
   methods: {
     functionSearchNamePost() {
-        this.searchNamePost();
-      
+      this.searchNamePost();
     },
     onDeletedPost(key) {
       const requestOptions = {
@@ -86,7 +84,7 @@ export default {
         window.location="/";      
       });
     },
-        onValidatePost(key) {
+    onValidatePost(key) {
       const requestOptions = {
         headers: authHeader()
       };
@@ -110,13 +108,29 @@ export default {
         this.qqt = json.length;
         let user = JSON.parse(localStorage.getItem('user'));
           if (user && user.token) {
-              this.profil_utilisateur = user.userId;
-                      this.profil_user_or_admin = user.profile;
-
+            this.profil_utilisateur = user.userId;
+            this.profil_user_or_admin = user.profile;
           }
       });
     },
-
+    onTestGetComments() {
+      const requestOptions = {
+        headers: authHeader()
+      };
+      this.$http.get('http://localhost:3000/api/forum/post/commentsnotvalid', requestOptions ).then(function(response) {
+        return response.json();
+      }).then(function(json) {
+          console.log(json);
+        this.httpgetResponseComments = json;
+        this.functionSearchNamePost();
+        this.qqt = json.length;
+        let user = JSON.parse(localStorage.getItem('user'));
+          if (user && user.token) {
+            this.profil_utilisateur = user.userId;
+            this.profil_user_or_admin = user.profile;
+          }
+      });
+    },
     searchNameId() {
       let list;
       const requestOptions = {
@@ -138,7 +152,6 @@ export default {
         }   
       });
     },
-
     searchNamePost() {
       let list;
       const requestOptions = {

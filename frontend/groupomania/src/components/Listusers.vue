@@ -1,44 +1,44 @@
 <template>
-    <div class="row">
-        <div class="col-sm-12">
-            <ul class="nav justify-content-center">
-                <li class="nav-item">
-                    <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider</router-link></p>
-                </li>
-                <li class="nav-item">
-                    <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider</router-link></p>
-                </li>
-                <li class="nav-item">
-                    <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
-                </li>
-                <li class="nav-item">
-                    <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
-                </li>
-            </ul>
-        </div>
-        <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <li v-for="item in postListUsername" :key="item.id">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                {{ item.firstname }} {{ item.lastname }}
-                            </h5>
-                            <div class="card-text">
-                            <span>
-                                {{ item.email }}
-                            </span>
-                            <br>
-                            <span>
-                                <img :src="item.avatar" />
-                            </span>
-                        </div>   
-                        <b-icon-trash-fill class="trash" scale="2" @click="deletedUser(item.id)"></b-icon-trash-fill>
-                    </div>
-                </div>
-            </li>
-        </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <ul class="nav justify-content-center">
+          <li class="nav-item">
+              <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider</router-link></p>
+          </li>
+          <li class="nav-item">
+              <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider</router-link></p>
+          </li>
+          <li class="nav-item">
+              <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
+          </li>
+          <li class="nav-item">
+              <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
+          </li>
+      </ul>
     </div>
+    <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <li v-for="item in postListUsername" :key="item.id">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ item.firstname }} {{ item.lastname }}
+                        </h5>
+                        <div class="card-text">
+                        <span>
+                          {{ item.email }}
+                        </span>
+                        <br>
+                        <span>
+                          <img :src="item.avatar" />
+                        </span>
+                    </div>   
+                    <b-icon-trash-fill class="trash" scale="2" @click="deletedUser(item.id)"></b-icon-trash-fill>
+                </div>
+            </div>
+        </li>
+    </div>
+  </div>
 </template>
 
 <script>

@@ -1,23 +1,25 @@
 
 <template>
-    <div class="signup">
-        <div id="app">
-            <div class="container">
-                <fieldset>
-                    <div class="text-center">
-                        <div class="form-group font-weight-bold card-header">
-                            <h1 class="text-center">Crée un nouveau poste</h1>
-                    <textarea class="form-control" rows="7" cols="50" v-model="text" placeholder="Votre texte pour le poste"></textarea>   
-                            <input class="form-control email" type="text" placeholder="lien" v-model="lien"/>
-                            <input type="submit" name="enregister" class="form-control button btn btn-success btn-lg" value="Enregister" @click="registerPost()"/>
-                  <p class="text-center"><router-link class="form-control text-center button btn btn-secondary btn-lg" to="/">Retour</router-link></p>
-                            {{ error }}
-                        </div>
-                    </div>
-                </fieldset>
+  <div class="signup">
+    <div id="app">
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 col-xl-4 colonne-centree">
+          <fieldset>
+            <div class="text-center">
+              <div class="form-group font-weight-bold card-header">
+                <h1 class="text-center">Crée un nouveau poste</h1>
+                <textarea class="form-control" rows="7" cols="50" v-model="text" placeholder="Votre texte pour le poste"></textarea>   
+                <input class="form-control email" type="text" placeholder="lien" v-model="lien"/>
+                <input type="submit" name="enregister" class="form-control button btn btn-success btn-lg" value="Enregister" @click="registerPost()"/>
+                <p class="text-center"><router-link class="form-control text-center button btn btn-secondary btn-lg" to="/">Retour</router-link></p>
+                {{ error }}
+              </div>
             </div>
+          </fieldset>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 
@@ -26,57 +28,28 @@
 <script>
 import { authHeader } from './authHeaders.js';
 
-
 export default {
-    name: 'signu',
-    props: {
-        msg: String
-    },
-    data() {
-        return {
-        httpPostStatus: '',
-        error: '',
-        httpGetStatus: '',
-        errors: [],
-        httpResponse: '',
-        httpToken: '',
-        httpgetResponse: ''
-        }
-    },
-      computed: {
+  name: 'signu',
+  props: {
+    msg: String
+  },
+  data() {
+    return {
+      httpPostStatus: '',
+      error: '',
+      httpGetStatus: '',
+      errors: [],
+      httpResponse: '',
+      httpToken: '',
+      httpgetResponse: ''
+    }
+  },
+  computed: {
     computedWidth: function () {
       return this.backgroundcolor;
     }
   },
-    methods: {
-          checkForm: function (e) {
-      if (this.email && this.firstname && this.lastname && this.password && this.password2 && this.password == this.password2) {
-        this.Signupnewuser();
-      }
-
-      this.errors = [];
-
-    if (!this.email) {
-        this.errors.push('Adresse mail manquante');
-    }
-    if (!this.firstname) {
-        this.errors.push('Nom manquant');
-    }
-    if (!this.lastname) {
-        this.errors.push('Prénom manquant');
-    }
-    if (!this.password) {
-        this.errors.push('Mot de passe manquant');
-    }
-    if (!this.password2) {
-        this.errors.push('Vérification mot de passe manquant');
-    }
-    if (!this.password == !this.password2) {
-        this.errors.push('Mot de passe non identique');
-    }
-
-      e.preventDefault();
-    },
+  methods: {
     registerPost() {
         let datePost = new Date();
               const requestOptions = {
@@ -90,8 +63,8 @@ export default {
         this.httpResponse = json;
         this.$router.push('/') 
       });
-}
-}
+    }
+  }
 }
 
 </script>

@@ -2,18 +2,18 @@
 <template>
   <span v-if="this.profil_user_or_admin === 1">   <!-- Partie Administrateur -->
     <ul class="nav justify-content-center">
-      <li class="nav-item">
-        <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider</router-link></p>
-      </li>
-      <li class="nav-item">
-        <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider</router-link></p>
-      </li>
-      <li class="nav-item">
-        <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
-      </li>
-      <li class="nav-item">
-        <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
-      </li>
+        <li class="nav-item">
+            <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider <span class="badge badge-danger">{{httpgetResponsePost.length}}</span></router-link></p>
+        </li>
+        <li class="nav-item">
+            <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider <span class="badge badge-danger">{{httpgetResponseComments.length}}</span></router-link></p>
+        </li>
+        <li class="nav-item">
+            <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
+        </li>
+        <li class="nav-item">
+            <input class="text-center button btn mx-1 btn-secondary" value="Deconnection" @click="onDisconnect()"/>
+        </li>
     </ul>
   </span>
   <span v-else-if="this.profil_user_or_admin === 0">   <!-- Partie Utilisateur -->
@@ -29,8 +29,7 @@
       </li>
     </ul>
         <div class="row">
-          <div class="col-sm-4"></div>
-            <div class="col-sm-4">
+          <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 col-xl-4 colonne-centree">
             <li v-for="item in httpgetResponse" :key="item.id">
               <div class="card">
                 <div class="card-body">
@@ -108,9 +107,6 @@
             </div>
           </div>
         </div>
-  {{ httpResponse }}
-  {{ httpStatus }}
-  
   </span>
 </template>
 
@@ -143,6 +139,8 @@ export default {
       postListUsername: [],
       httpgetuserResponsed: '',
       httpgetResponse: '',
+      httpgetResponsePost: '',
+      httpgetResponseComments: '',
       profil_utilisateur: '',
       profil_user_or_admin: '',
       editpost: 0,
@@ -151,7 +149,9 @@ export default {
     }
   },
   created(){
-    this.onTestGet()
+    this.onTestGet(),
+    this.onTestGetComments(),
+    this.onTestGetPost()
   }, 
 
   methods: {
@@ -179,6 +179,43 @@ export default {
     functionSearchNamePost() {
         this.searchNamePost();
       
+    },
+        onTestGetPost() {
+      const requestOptions = {
+        headers: authHeader()
+      };
+      this.$http.get('http://localhost:3000/api/forum/postnotvalid', requestOptions ).then(function(response) {
+        return response.json();
+      }).then(function(json) {
+        this.httpgetResponsePost = json;
+        this.functionSearchNamePost();
+        this.qqt = json.length;
+        let user = JSON.parse(localStorage.getItem('user'));
+          if (user && user.token) {
+              this.profil_utilisateur = user.userId;
+                      this.profil_user_or_admin = user.profile;
+
+          }
+      });
+    },
+    onTestGetComments() {
+      const requestOptions = {
+        headers: authHeader()
+      };
+      this.$http.get('http://localhost:3000/api/forum/post/commentsnotvalid', requestOptions ).then(function(response) {
+        return response.json();
+      }).then(function(json) {
+          console.log(json);
+        this.httpgetResponseComments = json;
+        this.functionSearchNamePost();
+        this.qqt = json.length;
+        let user = JSON.parse(localStorage.getItem('user'));
+          if (user && user.token) {
+              this.profil_utilisateur = user.userId;
+                      this.profil_user_or_admin = user.profile;
+
+          }
+      });
     },
     onComments(key) {
       if (this.Commentaire != 0 && key == this.Commentaire) {
@@ -341,6 +378,9 @@ export default {
         this.profil_id = json.userId;
         this.profil_user_or_admin = json.profile;
         window.location="/";
+      })
+      .catch(function(error) {
+        this.errors.push(error.body.error);
       });
     },
     onDisconnect() {

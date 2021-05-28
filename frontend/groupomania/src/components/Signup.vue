@@ -39,66 +39,67 @@
 
 
 export default {
-    name: 'signup',
-    props: {
-        msg: String
-    },
-    data() {
-        return {
-        httpPostStatus: '',
-        error: '',
-        httpGetStatus: '',
-        errors: [],
-        httpResponse: '',
-        httpToken: '',
-        httpgetResponse: ''
-        }
-    },
-      computed: {
+  name: 'signup',
+  props: {
+      msg: String
+  },
+  data() {
+      return {
+      httpPostStatus: '',
+      error: '',
+      httpGetStatus: '',
+      errors: [],
+      httpResponse: '',
+      httpToken: '',
+      httpgetResponse: ''
+      }
+  },
+  computed: {
     computedWidth: function () {
       return this.backgroundcolor;
     }
   },
-    methods: {
-          checkForm: function (e) {
+  methods: {
+    checkForm: function (e) {
       if (this.email && this.firstname && this.lastname && this.password && this.password2 && this.password == this.password2) {
         this.Signupnewuser();
       }
-
       this.errors = [];
-
-    if (!this.email) {
-        this.errors.push('Adresse mail manquante');
-    }
-    if (!this.firstname) {
-        this.errors.push('Nom manquant');
-    }
-    if (!this.lastname) {
-        this.errors.push('Prénom manquant');
-    }
-    if (!this.password) {
-        this.errors.push('Mot de passe manquant');
-    }
-    if (!this.password2) {
-        this.errors.push('Vérification mot de passe manquant');
-    }
-    if (!this.password == !this.password2) {
-        this.errors.push('Mot de passe non identique');
-    }
-
+      if (!this.email) {
+          this.errors.push('Adresse mail manquante');
+      }
+      if (!this.firstname) {
+          this.errors.push('Nom manquant');
+      }
+      if (!this.lastname) {
+          this.errors.push('Prénom manquant');
+      }
+      if (!this.password) {
+          this.errors.push('Mot de passe manquant');
+      }
+      if (!this.password2) {
+          this.errors.push('Vérification mot de passe manquant');
+      }
+      if (this.password != this.password2) {
+          this.errors.push('Mot de passe non identique');
+      }
       e.preventDefault();
     },
     Signupnewuser() {
-        var register = { email:this.email, firstname:this.firstname, lastname:this.lastname, password:this.password };
-        this.$http.post('http://localhost:3000/api/auth/signup', register ).then(function(response) {
-            this.httpPostStatus = response.status;
-            return response.json();
-        }).then(function(json) {
-        this.httpResponse = json;
-        this.$router.push('/') 
+      var register = { email:this.email, firstname:this.firstname, lastname:this.lastname, password:this.password };
+      this.$http.post('http://localhost:3000/api/auth/signup', register ).then(function(response) {
+          this.httpPostStatus = response.status;
+          return response.json();
+      })
+      .then(function(json) {
+          this.httpResponse = json;
+          this.$router.push('/') 
+      })
+      .catch(function(error) {
+        this.errors.push(error.body.error);
       });
-}
-}
+    }
+  }
 }
 
 </script>
