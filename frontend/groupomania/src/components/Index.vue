@@ -45,7 +45,7 @@
               </div>
                   </h5>
                     <div class="card-text">
-                      <img :src="item.media" />
+                      <img alt="image" :src="item.media" />
                     </div>
                     <div class="card-text">
                       <span v-if="editpost == item.id"><textarea v-model="postedit" :placeholder="[[item.description]]"></textarea><br><input type="submit" name="enregister" class=" col-6 form-control button btn btn-success btn-md" value="Envoyer" @click="editPost(item.id)"/></span><span v-else>

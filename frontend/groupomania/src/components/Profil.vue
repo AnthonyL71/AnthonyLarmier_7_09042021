@@ -13,7 +13,7 @@
                     <span v-if="user.id == profil_utilisateur">
                       <h3 class="pt-4">Prénom: {{user.firstname}}</h3>
                       <h3>Nom: {{user.lastname}}</h3>
-                      <img :src="user.avatar" />
+                      <img alt="image" :src="user.avatar" />
                       <p v-if="errors.length">
                         <ul id="ulerror">
                           <li id="lierror" v-for="error in errors" :key="error">{{ error }}</li>
