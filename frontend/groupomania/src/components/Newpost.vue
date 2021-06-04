@@ -8,8 +8,8 @@
             <div class="text-center">
               <div class="form-group font-weight-bold card-header">
                 <h1 class="text-center">Crée un nouveau poste</h1>
-                <textarea class="form-control" rows="7" cols="50" v-model="text" placeholder="Votre texte pour le poste"></textarea>   
-                <input class="form-control email" type="text" placeholder="lien" v-model="lien"/>
+                <textarea class="form-control" rows="7" cols="50" v-model="text" placeholder="Votre texte pour le poste"></textarea>  
+                <input class="form-control email" type="text" placeholder="Placer ici un lien d'une image (optionnel)" v-model="lien"/>
                 <input type="submit" name="enregister" class="form-control button btn btn-success btn-lg" value="Enregister" @click="registerPost()"/>
                 <p class="text-center"><router-link class="form-control text-center button btn btn-secondary btn-lg" to="/">Retour</router-link></p>
                 {{ error }}

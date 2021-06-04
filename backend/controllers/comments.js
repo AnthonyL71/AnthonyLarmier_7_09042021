@@ -5,7 +5,7 @@ const Comments = db.comments;
 
 // Search comments by Post
 exports.getcomments = (req, res, next) => {
-  Comments.findAll({ where: { post_id: req.params.id, validate: 1 },
+  Comments.findAll({ where: { post_id: req.params.id},
     order: [['id', 'DESC']]})
   .then(
     (comments) => {

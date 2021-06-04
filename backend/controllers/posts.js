@@ -18,7 +18,7 @@ exports.getone = (req, res, next) => {
 
 // Search all Postes
 exports.viewall = (req, res, next) => {
-  Post.findAll({ where: { validate: 1 },
+  Post.findAll({
     order: [['id', 'DESC']]}).then(
     (post) => {
       res.status(200).json(post);
@@ -34,7 +34,7 @@ exports.viewall = (req, res, next) => {
 exports.searchnotvalid = (req, res, next) => {
   let profil_user = req.headers.authorization.split(' ')[2];
     if (profil_user == 1) {
-    Post.findAll({ where: { validate: 0 },
+    Post.findAll({
       order: [['id', 'DESC']]}).then(
       (post) => {
         res.status(200).json(post);

@@ -45,7 +45,9 @@
               </div>
                   </h5>
                     <div class="card-text">
-                      <img alt="image" :src="item.media" />
+                      <span v-if="item.media != null">
+                        <img alt="image" :src="item.media" />
+                      </span>
                     </div>
                     <div class="card-text">
                       <span v-if="editpost == item.id"><textarea v-model="postedit" :placeholder="[[item.description]]"></textarea><br><input type="submit" name="enregister" class=" col-6 form-control button btn btn-success btn-md" value="Envoyer" @click="editPost(item.id)"/></span><span v-else>
@@ -313,7 +315,7 @@ export default {
         this.httpPostStatus = response.status;
         return response.json();
       }).then(function() {
-        alert('Commentaire envoyé, en attente de validation par un administrateur');
+        alert('Commentaire envoyé !');
         window.location="/";
       });
     },
@@ -327,7 +329,7 @@ export default {
         this.httpPostStatus = response.status;
         return response.json();
       }).then(function() {
-        alert('Post édité, en attente de validation par un administrateur');
+        alert('Post édité !');
         window.location="/";
       });
     },
@@ -341,7 +343,7 @@ export default {
         this.httpPostStatus = response.status;
         return response.json();
       }).then(function() {
-        alert('Commentaire édité, en attente de validation par un administrateur');
+        alert('Commentaire édité !');
         window.location="/";
       });
     },

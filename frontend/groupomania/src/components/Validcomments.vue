@@ -34,7 +34,6 @@
                 </span>
               </div>   
               <b-icon-trash-fill class="trash" scale="2" @click="onDeletedComment(item.id)"></b-icon-trash-fill>
-              <b-icon-check class="check" scale="3" @click="onValidateComment(item.id)"></b-icon-check>
             </div>
           </div>
         </li>
@@ -195,6 +194,7 @@ li {
 .trash {
   color: red;
   margin-left: 0%;
+  margin-top: 7px;
 }
 .password {
   margin: 25px 0 25px 0;

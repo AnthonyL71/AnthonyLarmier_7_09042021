@@ -1,7 +1,6 @@
 const db = require("../models");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const dbConfig = require("../config/config.js");
 const User = db.user;
 
  // Login user
@@ -22,7 +21,7 @@ const User = db.user;
           profile: user.admin,
           token: jwt.sign(
             { userId: user._id },
-            'RANDOM_TOKEN_SECRET',
+            process.env.SECRET_RANDOM_TOKEN,
             { expiresIn: '24h' }
           )
         });
@@ -35,34 +34,40 @@ const User = db.user;
 
 // Create a new user
 exports.create = (req, res) => {
-  User.findOne({ where: { email: req.body.email } })
-  .then(user => {
-    if (user) {
-      return res.status(404).json({ error: 'Mail already found !' });
-    }
-    bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const newuser = {
-        email: req.body.email,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        avatar: req.body.avatar,
-        password: hash,
-        admin: 0
-      };
-    User.create(newuser)
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Error created new user."
+  // Regex for password complicated
+  var regex = new RegExp("^(?=.{5,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+  if (regex.test(req.body.password) == false) {
+     res.status(400).json({ error: 'Mot de passe pas assez sécurisé ! [A-Z and a-Z] ou [a-z and 0-9] minimum 5 caractères' }) 
+  } else {
+    User.findOne({ where: { email: req.body.email } })
+    .then(user => {
+      if (user) {
+        return res.status(404).json({ error: 'Mail already found !' });
+      }
+      bcrypt.hash(req.body.password, 10)
+      .then(hash => {
+        const newuser = {
+          email: req.body.email,
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          avatar: req.body.avatar,
+          password: hash,
+          admin: 0
+        };
+      User.create(newuser)
+        .then(data => {
+          res.send(data);
+        })
+        .catch(err => {
+          res.status(500).send({
+            message:
+              err.message || "Error created new user."
+          });
         });
       });
-    });
-  })
-  .catch(error => res.status(500).json({ error }));
+    })
+    .catch(error => res.status(500).json({ error }));
+  }
   };
 
 // Deleted user
@@ -71,7 +76,7 @@ exports.delete = (req, res, next) => {
   let profil_user = req.headers.authorization.split(' ')[2];
   User.findOne({ where: { id: req.params.id } })
     .then(user => {
-      if (user.profil_id == userId) {
+      if (user.id == userId) {
         User.destroy({ where: { id: req.params.id } })
         res.status(200).json({
           message: 'User deleted.',

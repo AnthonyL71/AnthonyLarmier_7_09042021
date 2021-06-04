@@ -3,10 +3,10 @@
     <div class="col-sm-12">
       <ul class="nav justify-content-center">
         <li class="nav-item">
-          <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider <span class="badge badge-danger">{{httpgetResponse.length}}</span></router-link></p>
+          <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Posts </router-link></p>
         </li>
         <li class="nav-item">
-          <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider <span class="badge badge-danger">{{httpgetResponseComments.length}}</span></router-link></p>
+          <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires </router-link></p>
         </li>
         <li class="nav-item">
           <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>
@@ -37,7 +37,6 @@
                 </span>
               </div>   
               <b-icon-trash-fill class="trash" scale="2" @click="onDeletedPost(item.id)"></b-icon-trash-fill>
-              <b-icon-check class="check" scale="3" @click="onValidatePost(item.id)"></b-icon-check>
             </div>
           </div>
         </li>
@@ -106,7 +105,6 @@ export default {
         return response.json();
       }).then(function(json) {
         this.httpgetResponse = json;
-        this.functionSearchNamePost();
         this.qqt = json.length;
         let user = JSON.parse(localStorage.getItem('user'));
           if (user && user.token) {
@@ -195,6 +193,7 @@ li {
 .trash {
   color: red;
   margin-left: 0%;
+  margin-top: 7px;
 }
 .password {
   margin: 25px 0 25px 0;
