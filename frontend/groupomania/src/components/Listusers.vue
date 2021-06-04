@@ -3,10 +3,10 @@
     <div class="col-sm-12">
       <ul class="nav justify-content-center">
         <li class="nav-item">
-          <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Post à valider <span class="badge badge-danger">{{httpgetResponsePost.length}}</span></router-link></p>
+          <p><router-link class="text-center button mx-1 btn btn-primary" to="/validpost">Posts </router-link></p>
         </li>
         <li class="nav-item">
-          <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires à valider <span class="badge badge-danger">{{httpgetResponseComments.length}}</span></router-link></p>
+          <p><router-link class="text-center button mx-1 btn btn-warning" to="/validcomments">Commentaires </router-link></p>
         </li>
         <li class="nav-item">
           <p><router-link class="text-center button mx-1 btn btn-info" to="/listusers">Liste d'utilisateurs</router-link></p>

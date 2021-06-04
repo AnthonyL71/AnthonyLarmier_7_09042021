@@ -39,6 +39,10 @@ exports.create = (req, res) => {
   if (regex.test(req.body.password) == false) {
      res.status(400).json({ error: 'Mot de passe pas assez sécurisé ! [A-Z and a-Z] ou [a-z and 0-9] minimum 5 caractères' }) 
   } else {
+  let regexEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (regexEmail.test(req.body.email) == false) {
+    res.status(400).json({ error: 'Veuillez rentrer un email correct (de la forme andre@groupomania.fr)' }) 
+  } else {
     User.findOne({ where: { email: req.body.email } })
     .then(user => {
       if (user) {
@@ -68,6 +72,7 @@ exports.create = (req, res) => {
     })
     .catch(error => res.status(500).json({ error }));
   }
+  } 
   };
 
 // Deleted user

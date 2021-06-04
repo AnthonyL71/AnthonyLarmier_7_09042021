@@ -11,10 +11,12 @@ npm install
 
 Import "base_de_donées.sql" to mysql
 
-Edit config/config.js
+Edit end/env.dev 
+
+And complete with your login bdd
 
 ```
-nodemon server
+npm run dev
 ```
 
 ## Project setup for frontend
