@@ -11,12 +11,13 @@ npm install
 
 Import "base_de_donées.sql" to mysql
 
-Edit end/env.dev 
+Edit env/env.template
 
 And complete with your login bdd
 
+and rename or copy env.template to env.the-name-you-chose 
 ```
-npm run dev
+npm run the-name-you-chose
 ```
 
 ## Project setup for frontend
@@ -27,6 +28,9 @@ cd frontend/groupomania
 ```
 npm install
 ```
+
+you need install vue-cli
+
 
 ### Compiles and hot-reloads for development
 ```
