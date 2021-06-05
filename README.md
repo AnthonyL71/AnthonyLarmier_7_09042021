@@ -1,6 +1,10 @@
 # groupomania
 
 ## Project setup for backend
+
+Open Terminal
+
+
 ```
 cd backend
 ```
@@ -23,6 +27,10 @@ npm run dev
 ```
 
 ## Project setup for frontend
+
+Open new Terminal
+
+
 ```
 cd frontend/groupomania
 ```
