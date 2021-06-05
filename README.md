@@ -9,9 +9,11 @@ cd backend
 npm install
 ```
 
-Import "base_de_donées.sql" to mysql
+create new bdd and 
 
-Edit env/env.template
+Import "base_de_donées.sql" in your new bdd.
+
+Edit backend/env/env.template
 
 And complete with your login bdd
 
