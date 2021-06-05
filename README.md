@@ -15,9 +15,9 @@ Edit env/env.template
 
 And complete with your login bdd
 
-and rename or copy env.template to env.the-name-you-chose 
+and rename or copy env.template to env.dev
 ```
-npm run the-name-you-chose
+npm run dev
 ```
 
 ## Project setup for frontend
