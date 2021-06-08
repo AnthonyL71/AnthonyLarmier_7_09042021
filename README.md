@@ -20,10 +20,15 @@ Import "base_de_donées.sql" in your new bdd.
 Create new file to env/.env.dev
 
 NODE_ENV=dev
+
 SECRET_RANDOM_TOKEN=
+
 BDD_HOST=
+
 BDD_USER=
+
 BDD_PASSWORD=
+
 BDD_DB=
 
 
