@@ -17,11 +17,18 @@ create new bdd and
 
 Import "base_de_donées.sql" in your new bdd.
 
-Edit backend/env/env.template
+Create new file to env/.env.dev
+
+NODE_ENV=dev
+SECRET_RANDOM_TOKEN=
+BDD_HOST=
+BDD_USER=
+BDD_PASSWORD=
+BDD_DB=
+
 
 And complete with your login bdd
 
-and rename or copy env.template to env.dev
 ```
 npm run dev
 ```
