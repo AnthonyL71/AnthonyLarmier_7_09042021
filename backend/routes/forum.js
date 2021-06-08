@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const postsCtrl = require('../controllers/posts');
 const commentsCtrl = require('../controllers/comments');
+const multer = require('../middleware/multer');
 
 // Routes Postes
 
@@ -13,13 +14,13 @@ router.get('/', auth, postsCtrl.viewall);
 // View One article
 router.get('/:id', auth, postsCtrl.getone);
 // Create article
-router.post('/', auth, postsCtrl.create);
+router.post('/', auth, multer, postsCtrl.create);
 // Validate new article
 router.post('/validate/:id', auth, postsCtrl.validateposts);
 // Modified article
 router.put('/:id', auth, postsCtrl.update);
 // Deleted article
-router.delete('/:id', auth, postsCtrl.delete);
+router.delete('/:id', auth, multer, postsCtrl.delete);
 
 
 

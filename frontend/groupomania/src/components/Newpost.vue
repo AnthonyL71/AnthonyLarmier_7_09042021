@@ -9,10 +9,14 @@
               <div class="form-group font-weight-bold card-header">
                 <h1 class="text-center">Crée un nouveau poste</h1>
                 <textarea class="form-control" rows="7" cols="50" v-model="text" placeholder="Votre texte pour le poste"></textarea>  
-                <input class="form-control email" type="text" placeholder="Placer ici un lien d'une image (optionnel)" v-model="lien"/>
+                <input type="file" ref="image" class="file-input" @change="upload">
                 <input type="submit" name="enregister" class="form-control button btn btn-success btn-lg" value="Enregister" @click="registerPost()"/>
                 <p class="text-center"><router-link class="form-control text-center button btn btn-secondary btn-lg" to="/">Retour</router-link></p>
-                {{ error }}
+                    <p v-if="errors.length">
+                      <ul id="ulerror">
+                        <li id="lierror" v-for="error in errors" :key="error">{{ error }}</li>
+                      </ul>
+                    </p>
               </div>
             </div>
           </fieldset>
@@ -41,7 +45,8 @@ export default {
       errors: [],
       httpResponse: '',
       httpToken: '',
-      httpgetResponse: ''
+      httpgetResponse: '',
+      image: null
     }
   },
   computed: {
@@ -50,14 +55,29 @@ export default {
     }
   },
   methods: {
+    upload() {
+      this.image = this.$refs.image.files[0];
+      console.log(this.image);
+    },
     // Function for send form to api
     registerPost() {
-        let datePost = new Date();
-              const requestOptions = {
+      this.errors = [];
+      let datePost = new Date();
+      const requestOptions = {
         headers: authHeader()
       };
-        var register = { description:this.text, media:this.lien, posted_date:datePost };
-        this.$http.post('http://localhost:3000/api/forum', register, requestOptions ).then(function(response) {
+
+      const formData = new FormData();
+      if (this.text == undefined) {
+        this.errors.push('Aucun texte !');
+      }
+      if (this.image == null) {
+        this.errors.push('Aucune image !');
+      }
+        formData.append("image", this.image, this.image.filename);
+        formData.append("description", this.text);
+        formData.append("posted_date", datePost);
+        this.$http.post('http://localhost:3000/api/forum', formData, requestOptions ).then(function(response) {
             this.httpPostStatus = response.status;
             return response.json();
         }).then(function(json) {

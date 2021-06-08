@@ -1,5 +1,6 @@
 const db = require("../models");
 const Post = db.post;
+const fs = require('fs');
 
 // Search one Post
 exports.getone = (req, res, next) => {
@@ -81,9 +82,10 @@ exports.validateposts = (req, res, next) => {
 // Create new Post
 exports.create = (req, res, next) => {
   let userId = req.headers.authorization.split(' ')[3];
+  console.log(req.file.filename);
   const article = {
     profil_id: userId,
-    media: req.body.media,
+		media: req.protocol + '://' + req.get('host') + '/images/' + req.file.filename,
     description: req.body.description,
     posted_date: req.body.posted_date,
     validate: 0
@@ -125,20 +127,25 @@ exports.delete = (req, res, next) => {
     .then(post => {
       let userId = req.headers.authorization.split(' ')[3];
       let profil_user = req.headers.authorization.split(' ')[2];
+      let img = post.media.split('/images/')[1];
       if (post.profil_id == userId) {
         if (!post) {
           return res.status(404).json({ error: 'Post not found.' });
         }
+        fs.unlink("images/"+ img, () => {
         Post.destroy({ where: { id: req.params.id } })
         res.status(200).json({ message: 'Post deleted.', });
+        });
       } else {
-          if (profil_user == 1) {
+        if (profil_user == 1) {
+          fs.unlink("images/"+ img, () => {
             Post.destroy({ where: { id: req.params.id } }) 
             res.status(200).json({ message: 'Post deleted.', });
-          } else {
-            res.status(403).json({error: "Is not your post !" })
-          }
+          });
+        } else {
+          res.status(403).json({error: "Is not your post !" })
         }
+      }
     })
     .catch(error => res.status(500).json({ error }));
 };

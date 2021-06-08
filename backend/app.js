@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/users');
 const forumRoutes = require('./routes/forum');
-
+const path = require('path');
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,6 +13,7 @@ app.use((req, res, next) => {
     });
     
 app.use(bodyParser.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/auth', userRoutes);
 

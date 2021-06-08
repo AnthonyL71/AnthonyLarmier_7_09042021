@@ -124,7 +124,6 @@ export default {
         return response.json();
       }).then(function(json) {
         this.httpgetResponsePost = json;
-        this.functionSearchNamePost();
         this.qqt = json.length;
         let user = JSON.parse(localStorage.getItem('user'));
           if (user && user.token) {

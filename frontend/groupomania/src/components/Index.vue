@@ -181,42 +181,6 @@ export default {
         this.searchNamePost();
       
     },
-    // For admin, check post not validate
-    onTestGetPost() {
-      const requestOptions = {
-        headers: authHeader()
-      };
-      this.$http.get('http://localhost:3000/api/forum/postnotvalid', requestOptions ).then(function(response) {
-        return response.json();
-      }).then(function(json) {
-        this.httpgetResponsePost = json;
-        this.functionSearchNamePost();
-        this.qqt = json.length;
-        let user = JSON.parse(localStorage.getItem('user'));
-          if (user && user.token) {
-              this.profil_utilisateur = user.userId;
-              this.profil_user_or_admin = user.profile;
-          }
-      });
-    },
-    // For admin, check comments not validate
-    onTestGetComments() {
-      const requestOptions = {
-        headers: authHeader()
-      };
-      this.$http.get('http://localhost:3000/api/forum/post/commentsnotvalid', requestOptions ).then(function(response) {
-        return response.json();
-      }).then(function(json) {
-        this.httpgetResponseComments = json;
-        this.functionSearchNamePost();
-        this.qqt = json.length;
-        let user = JSON.parse(localStorage.getItem('user'));
-          if (user && user.token) {
-              this.profil_utilisateur = user.userId;
-              this.profil_user_or_admin = user.profile;
-          }
-      });
-    },
     // Function for menu comments
     onComments(key) {
       if (this.Commentaire != 0 && key == this.Commentaire) {
