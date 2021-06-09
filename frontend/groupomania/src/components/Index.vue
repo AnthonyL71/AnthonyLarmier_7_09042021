@@ -50,7 +50,16 @@
                       </span>
                     </div>
                     <div class="card-text">
-                      <span v-if="editpost == item.id"><textarea v-model="postedit" :placeholder="[[item.description]]"></textarea><br><input type="submit" name="enregister" class=" col-6 form-control button btn btn-success btn-md" value="Envoyer" @click="editPost(item.id)"/></span><span v-else>
+                      <span v-if="editpost == item.id">
+                        <textarea v-model="postedit" :placeholder="[[item.description]]"></textarea>
+                        <p>Changer d'image</p>
+                        <input type="file" :ref="[[item.id]]" class="file-input" @change="upload(item.id)">
+                        <p v-if="errorsedit.length">
+                          <ul id="ulerror">
+                            <li id="lierror" v-for="error in errorsedit" :key="error">{{ error }}</li>
+                          </ul>
+                        </p>
+                        <input type="submit" name="enregister" class=" col-6 form-control button btn btn-success btn-md" value="Envoyer" @click="editPost(item.id)"/></span><span v-else>
                       {{ item.description }}
                       </span>
                     </div>
@@ -131,6 +140,7 @@ export default {
       httpGetStatus: '',
       httpResponse: '',
       errors: [],
+      errorsedit: [],
       httpToken: '',
       qqt: '',
       Commentaire: 0,
@@ -145,9 +155,10 @@ export default {
       httpgetResponseComments: '',
       profil_utilisateur: '',
       profil_user_or_admin: '',
+      image: null,
       editpost: 0,
       editcommentaire: 0,
-      responseCommentaire: '',
+      responseCommentaire: ''    
     }
   },
   created(){
@@ -157,6 +168,11 @@ export default {
   }, 
 
   methods: {
+    // Download image
+    upload(id) {
+      this.image = null;
+      this.image = this.$refs.[id].[0].files[0];
+    },
     // Function for check validate form
     checkForm: function (e) {
       if (this.email && this.password) {
@@ -285,17 +301,28 @@ export default {
     },
     // Function for edit post 
     editPost(key) {
+        this.errorsedit = [];
         const requestOptions = {
           headers: authHeader()
         };
-      var connect = { description:this.postedit  };
-      this.$http.put('http://localhost:3000/api/forum/' + key + '', connect, requestOptions ).then(function(response) {
-        this.httpPostStatus = response.status;
-        return response.json();
-      }).then(function() {
-        alert('Post édité !');
-        window.location="/";
-      });
+      if (this.postedit == '') {
+        this.errorsedit.push('Aucun texte !');
+      }
+      if (this.image == null) {
+        this.errorsedit.push('Aucune image !');
+      }
+      if (this.postedit !== '') {
+        let formData = new FormData();
+        formData.append("image", this.image, this.image.filename);
+        formData.append("description", this.postedit);
+        this.$http.put('http://localhost:3000/api/forum/' + key + '', formData, requestOptions ).then(function(response) {
+          this.httpPostStatus = response.status;
+          return response.json();
+        }).then(function() {
+          alert('Post édité !');
+          window.location="/";
+        });
+      }
     },
     // Function for edit comments
     editCommentaireFonction(key) {

@@ -18,7 +18,7 @@ router.post('/', auth, multer, postsCtrl.create);
 // Validate new article
 router.post('/validate/:id', auth, postsCtrl.validateposts);
 // Modified article
-router.put('/:id', auth, postsCtrl.update);
+router.put('/:id', auth, multer, postsCtrl.update);
 // Deleted article
 router.delete('/:id', auth, multer, postsCtrl.delete);
 

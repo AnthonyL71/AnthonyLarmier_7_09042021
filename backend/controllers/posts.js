@@ -105,15 +105,18 @@ exports.update = (req, res, next) => {
   Post.findOne({ where: { id: req.params.id } })
   .then(post => {
     if (post.profil_id == userId) {
-        Post.update({ description: req.body.description, validate: 0 },{ where: { id: req.params.id } })
-      .then( () => {
-        res.status(201).json({ message: 'Article updated successfully!' });
-      })
-      .catch(
-        (error) => {
-          res.status(404).json({ error: error });
-        }
-      );
+      let img = post.media.split('/images/')[1];
+      fs.unlink("images/"+ img, () => {
+        Post.update({ description: req.body.description, media: req.protocol + '://' + req.get('host') + '/images/' + req.file.filename, validate: 0 },{ where: { id: req.params.id } })
+          .then( () => {
+            res.status(201).json({ message: 'Article updated successfully!' });
+          })
+          .catch(
+            (error) => {
+              res.status(404).json({ error: error });
+            }
+          );
+      });
     } else {
 			res.status(403).json({error: "Is not your post !" })
     }

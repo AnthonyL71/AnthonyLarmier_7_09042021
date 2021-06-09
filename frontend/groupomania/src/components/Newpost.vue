@@ -9,6 +9,7 @@
               <div class="form-group font-weight-bold card-header">
                 <h1 class="text-center">Crée un nouveau poste</h1>
                 <textarea class="form-control" rows="7" cols="50" v-model="text" placeholder="Votre texte pour le poste"></textarea>  
+                <p>Ajouter une image</p>
                 <input type="file" ref="image" class="file-input" @change="upload">
                 <input type="submit" name="enregister" class="form-control button btn btn-success btn-lg" value="Enregister" @click="registerPost()"/>
                 <p class="text-center"><router-link class="form-control text-center button btn btn-secondary btn-lg" to="/">Retour</router-link></p>
@@ -55,6 +56,7 @@ export default {
     }
   },
   methods: {
+    // Download image
     upload() {
       this.image = this.$refs.image.files[0];
       console.log(this.image);
